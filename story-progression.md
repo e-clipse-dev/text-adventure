@@ -1,9 +1,13 @@
 #SCRIPT
 
 ```mermaid
-  graph TD;
-      A-->B;
-      A-->C;
-      B-->D;
-      C-->D;
+
+flowchart TD;
+  a[start]---b{left or right?}
+  b-->|left|c[cool]
+  b--->|right|death
+
+  c-->d[cool]
+
+
 ```
