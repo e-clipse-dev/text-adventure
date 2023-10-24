@@ -1,6 +1,5 @@
 Story Brainstorm
 
-
 Crepe
 Ur a peasant and u live on the outskirts of the city. Breadmaker or smthn. You get a note saying to come to the castle. You gotta get there, but it’s a full day’s trip. On the way stuff tries to stop you
 The condition you arrive in changes what the king says to you? Not sure why they’d be called to the castle though
