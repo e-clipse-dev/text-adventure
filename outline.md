@@ -15,7 +15,7 @@ Jordles
 [I love the idea of being a peasant.] You live on the outskirts of a poor village as a farmer growing wheat to sell as a breadmaker. Your business has been doing well, because your crops have been bountiful. Your village however has been struggling economically so times are tough for everyone. Amidst this turmoil, your village is raided by bandits. Your crops/place has been ransacked including a precious family heirloom passed down from generations and your family member(s) are injured. You leave your family, to chase after these bandits and perhaps search for medicine in a neighboring village or city. Going through trials and tribulations, you meet creatures you must fight, bandits you must kill, enemies you must befriend, merchants you must buy/steal from, cities you must visit, and choices that define who your character is! 
 Among your travels, you find villages and other cities that have been ransacked/destroyed, befriend allies, ransack other villages for supplies, and end up at the royal city, where you get intel that your heirloom has been sold to a rich merchant. Your heirloom turns out to be enchanted with magic, and has been keeping your family’s land blessed this whole time. Without it, your business is sure to fail and your family will perish in the village’s failing economy. You must hunt down the heirloom within the city. By the end, you find your heirloom and the king offers a compromise for your family to live in the royal city in exchange for the heirloom blessing the city’s agricultural lands. 
 BTW I love this choice of font! Really aesthetic to look at! 
-	
+  
 
 
 
