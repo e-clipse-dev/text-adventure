@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = 'UTF-8'>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link type="text/css" rel="stylesheet" href="styles.css">
+        <script type="module" src="script.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    </head>
+    <body>
+
+        <!-- <img id="cc-background" src="images/chracter-creation-biggerpx.png"> -->
+        <div id="cc-background">
+            <section class="main-nav">
+                <section id="main-menu" class="menu-section main-menu">
+                    <h1 id="title">Random Title</h1>
+                    <a href="#" id="char-select" class="menu-options">Start</a>
+                    <a href="#">Options</a>
+                    <a href="#">Credits</a>
+                </section>
+                <section id="character-slot" class="menu-section char-select">
+                    <h1>Characters</h1>
+                    <a href="#" id="character1">Save Slot </a>
+                    <a href="#">Save Slot</a>
+                    <a href="#">Save Slot</a>
+                    <nav class="backMain">
+                        <a href="#">Back</a>
+                    </nav>
+                </section>
+
+            </section>
+            
+            <section class="sidenav">
+                <nav id="character-menu" class="sidenavgrid menu-section character-menu">
+                    <a href="javascript:void(0)" class="closebtn" >&times;</a>
+                    <section id="gender">
+                        <a href="#" id="male" class="gender">Male</a>
+                        <a href="#" id="female" class="gender">Female</a>
+                    </section>
+                    <input type="range" id="range" min="500" max="908" value="530">
+                    <a href="#" id="cc-outfit" class="menu-options">Outfits</a>
+                    <a href="#" id="cc-skin" class="menu-options">Skin Color</a>
+                    <a href="#" id="randomizer">Randomize</a>
+                    <hr class="width100">
+                    <a href="#" id="name-link"><input type="text" placeholder="Name?" id="name"></a>
+                    <a href="#" id="cc-finish">I'm Done!</a>
+                </nav>
+                <nav id="skin-sidenav" class="sidenavgrid menu-section cc-skin">
+                    <a href="#" class="skinColor">Pale</a>
+                    <a href="#" class="skinColor">Fair</a>
+                    <a href="#" class="skinColor">Beige</a>
+                    <a href="#" class="skinColor">Medium</a>
+                    <a href="#" class="skinColor">Olive</a>
+                    <a href="#" class="skinColor">Brown</a>
+                    <a href="#" class="skinColor">Black</a>
+                    <nav class="backChar">
+                        <a href="#">Back</a>
+                    </nav>
+                </nav>
+
+                <nav id="outfit-sidenav" class="sidenavgrid menu-section cc-outfit">
+                    <a href="#" class="outfit">Farmer</a>
+                    <a href="#" class="outfit">Thief</a>
+                    <a href="#" class="outfit">Merchant</a>
+                    <a href="#" class="outfit">Guard</a>
+                    <nav class="backChar">
+                        <a href="#">Back</a>
+                    </nav>
+                </nav>
+                
+                
+            </section>
+        
+            <img src="images/farmer male pale.png" alt="" id="character">
+
+            
+
+            
+        </div>
+        
+    </body>
+</html>
