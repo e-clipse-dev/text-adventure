@@ -23,9 +23,10 @@ Death/reset system
 Storage (indexedDB?)
 Shop System
 Shop inventory
-Potions: Poison Cure, Burn Cure, Health, Attack Boost, 
+Potions: Poison Cure, Burn Cure, Health, Attack Boost
 Medicine: Dressing (heals sickness) 
 Weapons: Ring, Sword, Bow & Arrow, Dagger
+Shop Categories: Weapons, Consumables, Materials (arent consumable items) 
 Specialized shops
 Shop rarity + item rarity
 Should cost more to buy than to sell
@@ -40,19 +41,30 @@ Attacks can miss (x%)
 Skip a turn in battle (x%)
 Gradually more tired — day 1 (+5%), day 2 (+5%), day 3 (pass out; day is lost) 
 Character Creation
- CC - [Sex - 4 outfits]  
+ CC - [Sex - 4 outfits] 
+
+
 Diplomat (merchant) 
-Weapon = magical item (ring)
-better merchant deals, more persuasive for character interactions 
+main trait is charisma
+weapon = magical item (ring)
+better merchant deals
+more persuasive in character interactions  
 Initiator (butcher) 
-Weapon = sword
+main trait is aggression
+weapon = sword
 better attacking stats
+
 Survivalist (farmer)
-Weapon = bow & arrow
-can forage better for resources, hunt better
+main trait is resourcefulness
+weapon = bow & arrow
+forages better for resources
+hunts better
 Tactician (thief) 
-Weapon = dagger
+main trait is stealth
+weapon = dagger
 increase chance to sneak, steal 
+
+
 
 Customizer to the right transition > character moves in the same direction
 Name to the left transition
@@ -112,6 +124,9 @@ Vines, Sticks, Rocks (can repel raiders or wake you up (%))
 Can alert you if there are raiders nearby, or help you catch food/animals.
 Add bait (amount of food -> increase animal size: s, m, l)) 
 Food Recipes
+
+
+
 Dressing[medicine] : nettles, sorrel, alcohol
 Mead[alcohol]: honey (flower), water
 Ale[alcohol] : yeast, water
@@ -126,20 +141,118 @@ Potato Beef Stew - potato, beef, onion, nettles
 Cream and Fruit - Milk, Butter, (any fruit)
 Cream Custard - Egg, Milk, Wheat, Nettles, (any nuts) 
 Buttermilk - Milk, butter
+Wafer -eggs, flour, sugar, ginger, cheese, salt
+
+
 Crafting
 Durability (weapons/items/food)
 Craft vs buy
 Craft it yourself - It breaks really quickly but it’s free. 
 Buy it - Better durability but you gotta pay
-STORY
+
+
+
+STORY GIST
+Diplomat (merchant) 
+charisma/talk/negotiate
+weapon = magical item (ring)
+better merchant deals
+more persuasive 
+
+Initiator (butcher) 
+aggression/action/himbo
+weapon = sword
+better attacking stats
+
+Survivalist (farmer) 
+resourcefulness/knowledgeable of surroundings
+use your surroundings to gain leverage. distraction. traps.
+weapon = bow & arrow
+forages better for resources
+hunts better
+Tactician (thief) 
+stealth/steal
+weapon = dagger
+increase chance to sneak, steal
+
+The player has a lucky amulet. Has been passed down through generations, and has been a family secret. You remember your mother telling you that luck does not mean the same thing to everyone; people change when they think they have power. It’s best not to tell anyone, she’s always said.
+
+Knowing this information, you’ve always been careful regarding your power. You use it to help keep your family and yourself afloat, and not for much else. You haven’t told anyone about this power, worried that it might incite greed and deceit like your mother foretold. 
+
+A raid occurs one day, and despite your best efforts, the Amulet is stolen and your family is injured. You must venture out to several cities, some more dangerous than others, and retrieve your Amulet without being killed. You must also find a potion for your family, and you only have so long. You plan to take a trip to the Royal city, but you’ll have to make several stops along the way considering how far you must travel.
+
+Throughout the journey, you learn more details about the Amulet’s true power. It’s not just for bringing luck—it can bring much more than that. This Amulet has the power to alter the kingdom itself.
+
+City 1: Luck
+The player learns that the amulet is more than just “lucky,” it possesses mystical properties that can be used for a wide range of things. There are certain factions that dedicate time searching for these mystical artifacts, each group defining “luck” differently. Some factions search for military advantage, some want economic gain, some want pure power. 
+
+The player decides whether to share the secrets to help others affected by the raids, or to keep the secrets hidden to protect its power.
+
+City 2: Unlocking History
+The player meets someone here that invites them to learn about the history of the Amulet, and it’s magic. The player learns that the Amulet is connected to the kingdom’s history, and once belonged to the king of the underground. 
+
+Long ago, the ancient relic was created by a powerful being from the underground. It was a gifted weapon to the king of the underground. Legend says this being was killed in war between the overworld and underworld, and the amulet was taken as part of the spoils. It was then gifted to the Royal family, used as a way to suppress outrest and maintain control.
+
+The amulet did what it was meant to, even in the overworld. It caused chaos and discord throughout the kingdom. The Amulet was thought to have been destroyed after the people of the royal city staged a revolt. Most believe it was destroyed in the revolt, but there are factions and mages with reason to believe it’s out there somewhere.
+
+The player decides whether they start to focus on the Amulet’s greater purpose, or if they stick with their original goals.
+
+City 3: Magedom
+This is a city with a higher population of mages. While you are more likely to find the information you need here, you are also more likely to get caught. You have to be careful with what you say and how you say it. 
+
+The player’s choices affect what will happen in the Royal city.
+
+City 4: The Royal City
+This is the city where the king lives. This is your final stop.
+
+Good Ending:
+The player unlocks the full potential of the Amulet, for the better. Once the player arrives in front of the King, they end up exchanging the amulet for the family’s health potion and for the family to live in the Royal city in safety and prosperity.
+
+Bad Ending:
+The player unlocks the full potential of the Amulet, for the worse. The player chooses to use it for personal gain, which attracts the attention of the factions seeking it for similar purposes. At the Royal city, the player must face off the faction leaders to keep the Amulet. Regardless of the group that ends up keeping the Amulet, the fighting doesn’t stop and chaos ensues. 
+
+Neutral Endings:
+The player does not unlock the full potential of the Amulet. They receive the potion to heal their family, and return home to resume their previous life.
 Chapter 1
-Player has a family heirloom, the rare Amulet of Prosperity. Without your amulet, you would have much less success in your work, and would not be able to support your family in the coming years. 
+The player, a peasant farmer, has the rare Amulet of Fortune in their possession. This is a family heirloom that’s been passed down through generations. 
 
-Player is a peasant farmer/merchant/butcher/thief living in the outskirts of town. You have a spouse and two kids. Open with going into town for trading purposes, and while you’re there a raid begins.
+One day, as the village prepares for market day, the protagonist has to make a choice. Usually you’d leave the Amulet at home in its safe, and only take it out when you need its luck the most. You’re worried that your upcoming harvest won’t cut it and you are worried about your family’s wealth and the idea of it not making it through to the next year. However, there have been talks of raids rampaging across the kingdom. 
 
-When the raiders get to your house, your wife and two children are at home. Your son gets badly injured during the raid, and will need a strong potion if he’s going to live through to the next season. You will have to find someone that sells potions with the necessary herbs.
+Point system for the 4 options
 
-You have to help your son without having your amulet stolen, which will become more difficult in each city, and without being killed in some way.
+You have to decide if you leave the Amulet here, or take it with you to sell for better prices. (safety vs money)
+1.1 - leave the amulet - safety
+1.2 - take the amulet - money
+1.1 Leave The Amulet
+You decide to leave the amulet at home. You will be safe during the raid and you avoid a battle. 
+You sell some items at the market, and when the raid starts you couldn’t have seen it coming. Do you hide or attempt to run for your family? (self vs family)
+	1.3 - hide (self)
+Survivalist
+	1.4 - run (family)
+Diplomat
+1.3 Hide
+There is a random chance you encounter a raider. There is no battle since you do not have the amulet, but there are threats.
+
+
+1.4 Run
+You run home, hoping you’re not too late. There is a random chance you encounter a raider. There is no battle since you don’t have the amulet, but there are threats.
+
+When you make it home, you notice that your house is burning. The raiders destroyed your house and took the amulet. Your family members were at home, and one is injured. They attempted to shield the others from the raiders and took the brunt of the attack.
+1.2 Take The Amulet
+You decide to take the amulet with you. Before the raid, you sell one or two items at higher prices than you otherwise would have. It gets taken from you in battle, but you do get better prices for market day before that happens. You attempt to run back to your home and notice your family in disarray. In the chaos of the raid, one of your family members has had their legs smashed by burned down pillars of the home.
+Chapter 1
+The player, a peasant farmer, has the rare Amulet of Fortune in their possession. This is a family heirloom that’s been passed down through generations. 
+
+One day, as the village prepares for market day, the protagonist has to make a choice. Usually you’d leave the Amulet at home in its safe, and only take it out when you need its luck the most. You’re worried that your upcoming harvest won’t cut it and you are worried about your family’s wealth and the idea of it not making it through to the next year. However, there have been talks of raids rampaging across the kingdom.
+
+You have to decide if you leave the Amulet here, or take it with you to sell/buy for better prices.
+1.1 - leave the amulet
+1.2 - take the amulet
+
+1.1 Leave The Amulet
+You decide to leave the amulet at home. The raiders destroyed your house and took the amulet, but you do avoid taking damage in a battle. Your family members were at home, and one is injured. They attempted to shield the others from the raiders and took the brunt of the attack.
+1.2 Take The Amulet
+You decide to take the amulet with you. It gets taken from you in battle, but you do get better prices for market day before that happens. You attempt to run back to your home and notice your family in disarray. In the chaos of the raid, one of your family members has had their legs smashed by burned down pillars of the home.
 Chapter 2
 Player has now left town to hopefully find a lead before it’s too late. You’re on your way to the first city–one that you used to frequent as a kid. You’re familiar with its layout, and there are people you used to know here. Should you be able to find them, they can probably get you some help. The trip will take 2 days/4 events.
 
@@ -168,7 +281,7 @@ MID ENDINGS:
 Kill the raiders ??
 
 BAD ENDING:
-Your son doesn’t make it
+Your family member doesn’t make it
 
 
 SCRIPT
@@ -225,7 +338,7 @@ You can see your house in the distance, untouched. That feels too good to be tru
 
 Nothing else you can do about it, you have to go in. Once inside, you notice it’s a complete mess. They were definitely here. 
 
-You see your son laid out on the ground, your spouse holding him.
+You see your child/spouse laid out on the ground, your spouse holding him.
 You don’t trust that your house could have been unscathed. You keep running, until all you can see is green.
 
 
