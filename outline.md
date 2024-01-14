@@ -20,8 +20,11 @@ Max inventory
 Clickable inventory icon, maybe “I” can be inventory button
 Inventory sorting (weapons, food, etc)
 Death/reset system
+If player dies, the day resets. Since events are random, the player will lose whatever resources they gathered for that day. 
 Storage (indexedDB?)
-Shop System
+Spells
+Varying amounts based on player type
+Shop
 Shop inventory
 Potions: Poison Cure, Burn Cure, Health, Attack Boost
 Medicine: Dressing (heals sickness) 
@@ -30,16 +33,22 @@ Shop Categories: Weapons, Consumables, Materials (arent consumable items)
 Specialized shops
 Shop rarity + item rarity
 Should cost more to buy than to sell
+Hunger
+After each event, lose 20% of the hunger bar. 2-5 events a day.
+Players can access inventory at any time, eating different recipes will increase the percentage by different amounts.
+Ingredients can be foraged, except for processed goods which must be bought in the tavern or from a traveling merchant.
 Statuses
 Poison/Sick (DOT)
-Burn
+Burn (DOT)
 Stun/Root (no spells)
-Frozen (no action)
+Frozen (skip a turn)
 Vulnerable (defense down)
-Fatigue
+Fatigue (Tired (not sleeping)/Hunger (not eating))
 Attacks can miss (x%)
 Skip a turn in battle (x%)
-Gradually more tired — day 1 (+5%), day 2 (+5%), day 3 (pass out; day is lost) 
+Gradually more tired — day 1 (+5%), day 2 (+5%), day 3 (pass out; day is lost), day 4 (pass out; day is lost), day 5 death.
+If both statuses are triggered, fatigue is x2. 
+(General/battle) Sludge Potion: 25% chance to miss attacks
 Character Creation
  CC - [Sex - 4 outfits] 
 
@@ -59,11 +68,11 @@ main trait is resourcefulness
 weapon = bow & arrow
 forages better for resources
 hunts better
+
 Tactician (thief) 
 main trait is stealth
 weapon = dagger
 increase chance to sneak, steal 
-
 
 
 Customizer to the right transition > character moves in the same direction
@@ -225,19 +234,33 @@ You have to decide if you leave the Amulet here, or take it with you to sell for
 1.2 - take the amulet - money
 1.1 Leave The Amulet
 You decide to leave the amulet at home. You will be safe during the raid and you avoid a battle. 
-You sell some items at the market, and when the raid starts you couldn’t have seen it coming. Do you hide or attempt to run for your family? (self vs family)
-	1.3 - hide (self)
-Survivalist
-	1.4 - run (family)
+You sell some items at the market, and when the raid starts you couldn’t have seen it coming. What do you do?
+	1.3 - hide (protect self)
+Tactician
+	1.4 - run (protect family)
 Diplomat
 1.3 Hide
 There is a random chance you encounter a raider. There is no battle since you do not have the amulet, but there are threats.
-
-
 1.4 Run
 You run home, hoping you’re not too late. There is a random chance you encounter a raider. There is no battle since you don’t have the amulet, but there are threats.
 
+While you’re running you notice another family being robbed and terrorized by the raiders, what do you do?
+1.5 - Threaten them (initiator)
+1.6 - De-escalate them (diplomat)
+1.7 - Keep running. You have to fend for yourself (tactician)
+1.8 - You’ll come back for them later. Your family comes first (survivalist)
+1.5 Threaten Them
+You decide to take matters into your own hands and you threaten the raiders. You say to leave them alone!
+
+They give each other a look, and begin to laugh. They do not feel threatened by your presence, and continue to take from the family. Do you wish to continue?
+
+	1.9 - Yes (initiator locked in)
+	1.10 - No (can no longer become initiator, back to main dialogue)
+1.9 Yes - initiator locked in
+You double down and take things into your own hands. You punch one of the raiders, and tell them to get away. Enter battle. If successful, then the family thanks you for your help and you skip to the end of the scene:
+
 When you make it home, you notice that your house is burning. The raiders destroyed your house and took the amulet. Your family members were at home, and one is injured. They attempted to shield the others from the raiders and took the brunt of the attack.
+==================================================================================
 1.2 Take The Amulet
 You decide to take the amulet with you. Before the raid, you sell one or two items at higher prices than you otherwise would have. It gets taken from you in battle, but you do get better prices for market day before that happens. You attempt to run back to your home and notice your family in disarray. In the chaos of the raid, one of your family members has had their legs smashed by burned down pillars of the home.
 Chapter 1
