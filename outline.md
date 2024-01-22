@@ -166,12 +166,13 @@ Diplomat (merchant)
 charisma/talk/negotiate
 weapon = magical item (ring)
 better merchant deals
-more persuasive 
+Persuasion, speaking, negotiation
 
 Initiator (butcher) 
 aggression/action/himbo
 weapon = sword
 better attacking stats
+Initiating combat, quick decision making, evasion
 
 Survivalist (farmer) 
 resourcefulness/knowledgeable of surroundings
@@ -179,6 +180,8 @@ use your surroundings to gain leverage. distraction. traps.
 weapon = bow & arrow
 forages better for resources
 hunts better
+Using surroundings
+
 Tactician (thief) 
 stealth/steal
 weapon = dagger
@@ -227,6 +230,8 @@ The player, a peasant farmer, has the rare Amulet of Fortune in their possession
 
 One day, as the village prepares for market day, the protagonist has to make a choice. Usually you’d leave the Amulet at home in its safe, and only take it out when you need its luck the most. You’re worried that your upcoming harvest won’t cut it and you are worried about your family’s wealth and the idea of it not making it through to the next year. However, there have been talks of raids rampaging across the kingdom. 
 
+“
+
 Point system for the 4 options
 
 You have to decide if you leave the Amulet here, or take it with you to sell for better prices. (safety vs money)
@@ -237,29 +242,40 @@ You decide to leave the amulet at home. You will be safe during the raid and you
 You sell some items at the market, and when the raid starts you couldn’t have seen it coming. What do you do?
 	1.3 - hide (protect self)
 Tactician
-	1.4 - run (protect family)
+	1.4 - ask someone what’s happening
 Diplomat
+1.5 - search for what’s happening
+Survivalist
+1.6 - run
+Initiator
+
 1.3 Hide
 There is a random chance you encounter a raider. There is no battle since you do not have the amulet, but there are threats.
-1.4 Run
+1.4 Ask For Clues
+1.5 Search For Clues
+1.6 Run
 You run home, hoping you’re not too late. There is a random chance you encounter a raider. There is no battle since you don’t have the amulet, but there are threats.
 
 While you’re running you notice another family being robbed and terrorized by the raiders, what do you do?
-1.5 - Threaten them (initiator)
-1.6 - De-escalate them (diplomat)
-1.7 - Keep running. You have to fend for yourself (tactician)
-1.8 - You’ll come back for them later. Your family comes first (survivalist)
-1.5 Threaten Them
+1.7 - Threaten them (initiator)
+1.8 - De-escalate them (diplomat)
+1.9 - Keep running. You have to fend for yourself (tactician)
+1.10 - You’ll come back for them later. Your family comes first (survivalist)
+1.7 Threaten Them
 You decide to take matters into your own hands and you threaten the raiders. You say to leave them alone!
 
 They give each other a look, and begin to laugh. They do not feel threatened by your presence, and continue to take from the family. Do you wish to continue?
 
-	1.9 - Yes (initiator locked in)
-	1.10 - No (can no longer become initiator, back to main dialogue)
-1.9 Yes - initiator locked in
+	1.11 - Yes (initiator locked in)
+	No (can no longer become initiator, reroute to main dialogue)
+1.11 Yes - initiator locked in
 You double down and take things into your own hands. You punch one of the raiders, and tell them to get away. Enter battle. If successful, then the family thanks you for your help and you skip to the end of the scene:
 
 When you make it home, you notice that your house is burning. The raiders destroyed your house and took the amulet. Your family members were at home, and one is injured. They attempted to shield the others from the raiders and took the brunt of the attack.
+
+1.8 De-escalate Them
+
+
 ==================================================================================
 1.2 Take The Amulet
 You decide to take the amulet with you. Before the raid, you sell one or two items at higher prices than you otherwise would have. It gets taken from you in battle, but you do get better prices for market day before that happens. You attempt to run back to your home and notice your family in disarray. In the chaos of the raid, one of your family members has had their legs smashed by burned down pillars of the home.
