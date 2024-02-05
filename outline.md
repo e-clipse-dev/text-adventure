@@ -327,7 +327,7 @@ SCRIPT
 Notes
 RAID SHOULD MAKE YOU END WITH A D.I.S.T. TRAIT!
 Trait cannot be overwritten
-Chapter 1
+Chapter 1 (old)
 
 You are [player] Arvell, a successful [trait] living on the outskirts of [town]. Your family has lived here for generations, and for generations your family has been the town’s most prominent supply of [].
 
@@ -397,3 +397,53 @@ You leave your home behind. You have to do something.
 
 
 After item has been chosen [item is free]
+Chapter 1 (new)
+You are a humble farmer living on the outskirts of town. 
+
+Your family has lived here for generations, and for generations your family has been a prominent food supply for the people living here.
+
+Today is Saturday, which means it’s Market Day! You’ve been waiting all week, hoping to sell off your recent harvest. 
+
+As you walk to town, you begin to think. As you think, you begin to worry. 
+
+You worry about your family, and about yourself as well. Money has been sparse, and a lot is riding on this harvest’s trade.
+
+You consider turning back for your lucky amulet, which is usually kept safely at home. It would make today go smoother, but you know it could also cause problems.
+
+The amulet has been with your family for several generations, and for as far back as you can remember it's been something that was kept hidden.
+
+You have only ever seen it worn for emergencies, for fear of inciting greed.
+
+Will you decide to leave the Amulet safely at home? Or will you take it with you to benefit your family?
+Leave it.
+Take it.
+You have chosen to leave the amulet at home. It’s better to be safe than sorry.
+
+You keep on the walk to town, and when you get there you see that Market Day has definitely started.
+
+There are several shop stands set up, each one specializing in something different. It’s a very busy day! There are possibly hundreds of people wandering about, trying to find and make deals.
+
+You walk up to the weapons shop, and begin to trade.
+
+
+
+You have chosen to take the amulet with you. It’s better to be safe than sorry.
+
+You turn back home, and open the container you keep from under the bed. 
+
+Quickly, you grab the amulet and place it around your neck. The container gets set back where it was, and you return to your original goal.
+
+You keep on the walk to town, and when you get there you see that Market Day has definitely started.
+
+There are several stands set up, each one specializing in something different. It’s a very busy day! There are possibly hundreds of people wandering about, trying to find and make deals.
+
+You walk up to the weapons shop, and begin to trade.
+
+
+[sell + purchase 1 item]
+
+Wait. You hear something. 
+
+No, you hear multiple things.
+
+There is shaking and rattling and 
