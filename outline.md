@@ -445,5 +445,3 @@ You walk up to the weapons shop, and begin to trade.
 Wait. You hear something. 
 
 No, you hear multiple things.
-
-There is shaking and rattling and 
