@@ -137,20 +137,21 @@ const globalInventory = {
 }
 
  console.log(globalInventory.consumables.potion["healthPotion"].description());
-function createNewInventory(obj, inputs) {
+/* function createNewInventory(obj, inputs) {
   // Initialize new inventory object
   let newInventory = {};
  
   // Helper function to copy an item
   const copyItem = (category, subCategory, item, newInventory) => {
     // Initialize new object structures in newInventory
-    newInventory[category] = newInventory[category] || {};
-    newInventory[category][subCategory] = newInventory[category][subCategory] || {};
-    newInventory[category][subCategory][item] = newInventory[category][subCategory][item] || {};
+    newInventory[category] = {};
+    newInventory[category][subCategory] = {};
+    newInventory[category][subCategory][item] = {};
   
     // Copy properties from original item to newInventory
     for (let prop in obj[category][subCategory][item]) {
       newInventory[category][subCategory][item][prop] = obj[category][subCategory][item][prop];
+      console.log(item + ' ' + prop);
     }
   };
  
@@ -186,7 +187,7 @@ function createNewInventory(obj, inputs) {
           for (let subCategory in obj[category]) {
             for (let item in obj[category][subCategory]) {
               if (item === input) {
-                copyItem(category, subCategory, item, newInventory);
+                copyItem(category, subCategory, input, newInventory);
               }
             }
           }
@@ -198,7 +199,7 @@ function createNewInventory(obj, inputs) {
   // Return the new inventory
   return newInventory;
  }
-
+*/
  function deepCopy(obj) {
   let result = Array.isArray(obj) ? [] : {};
   for (let key in obj) {
@@ -211,12 +212,13 @@ function createNewInventory(obj, inputs) {
      }
   }
   return result;
- }
+ } 
 
-/*  function createNewInventory(obj, inputs) {
+ function createNewInventory(obj, inputs) {
   // Initialize new inventory object
   let newInventory = {};
  
+  let randomizeEvery = false; //flag for checking whether we should randomize for every item in our input
   // Helper function to copy an item
   const copyItem = (category, subCategory, item, quantity, newInventory) => {
      // Initialize new object structures in newInventory
@@ -224,55 +226,99 @@ function createNewInventory(obj, inputs) {
      newInventory[category][subCategory] = newInventory[category][subCategory] || {};
      newInventory[category][subCategory][item] = newInventory[category][subCategory][item] || {};
  
-     // Set or update the quantity
-     newInventory[category][subCategory][item].quantity = quantity;
- 
      // Copy properties from original item to newInventory
      for (let prop in obj[category][subCategory][item]) {
       newInventory[category][subCategory][item][prop] = obj[category][subCategory][item][prop];
      }
+ 
+     // Set the quantity
+    if(quantity){ //if quantity is given
+      if(randomizeEvery){
+        console.log('random here');
+        newInventory[category][subCategory][item]['quantity'] = getRandomElementFromArray(quantity);
+      }
+      else{ 
+        console.log('non-random here');
+        newInventory[category][subCategory][item]['quantity'] = quantity;
+      }
+      
+    }
+    else if(quantity == undefined){ //if quantity is not given
+      if (obj[category][subCategory][item]['quantity']) { //grab the original quantity value if it exists
+        newInventory[category][subCategory][item]['quantity'] = obj[category][subCategory][item]['quantity'];
+      } 
+      else{
+        newInventory[category][subCategory][item]['quantity'] = 1; //if no original value exists, set quantity to 1. 
+      }
+      
+    }
   };
- 
-  // Check if the input is the entire object
-  if (!inputs) {
-     return deepCopy(obj);
+  
+  // Check if only the obj is given
+  if (!inputs) { 
+    return deepCopy(obj); //copy the entire object instead.
   }
- 
   // Loop over each input
-  for (let input of inputs) {
-     let category, subCategory, item, quantity;
- 
-     if (input.length === 3) {
-       [category, subCategory, item] = input;
-       quantity = 1;
-     } else if (input.length === 2) {
-       [category, item] = input;
-       quantity = 1;
-     } else {
-       continue;
+  for (let input of inputs) { 
+    //DETERMINE OUR ITEM AND THE QUANTITIES WE GIVE TO THEM --------------------------------------------------------------------------
+     let item, quantity;
+     item = input[0];
+     if(input.length == 3 || input.length > 2){
+      if(/^every$/i.test(input[input.length - 1])){ //check to see if every is at the last position of our input
+        if(/^\d+-\d+$/.test(input[1])){ //if range is given
+          quantity = [input[1]];
+        }
+        else{ //no range given only numbers for randomization
+          quantity = [...input.slice(1, -1)];
+        }
+        randomizeEvery = true; //flag is turned on to represent that the 'every' keyword was found
+      }
+      else{
+        // Generate a random quantity from the rest of the inputs
+        quantity = getRandomElementFromArray([...input.slice(1)]);
+        console.log('got quantity: ' + quantity);
+      }
+      
      }
- 
+     else if (input.length == 2) { 
+      console.log(/^\d+-\d+$/.test(input[1]));
+        if(/^\d+-\d+$/.test(input[1])){ //check for 2numbers between a dash
+          
+          quantity = getRandomElementFromArray([input[1]]);
+          console.log(quantity);
+        }
+        else{ //only one quantity was provided
+          console.log('only one quantity provided')
+          quantity = input[1]; 
+          console.log(quantity);
+        }
+     } else { //input.length == 1
+       quantity = undefined; //quantity wasn't given 
+     }
+     //------------------------------------------------------------------------------------------------------------------------------
+
      // Check if input is a category
-     if (obj[category]) {
+     if (obj[item]) {
        // Copy all items under the category
-       for (let subCategory in obj[category]) {
-         for (let item in obj[category][subCategory]) {
-           copyItem(category, subCategory, item, quantity, newInventory);
+       for (let subCategory in obj[item]) {
+         for (let subItem in obj[item][subCategory]) {
+           copyItem(item, subCategory, subItem, quantity, newInventory);
          }
        }
      } else {
        // Check if input is a subcategory
        for (let category in obj) {
-         if (obj[category][subCategory]) {
+         if (obj[category][item]) {
            // Copy all items under the subcategory
-           for (let item in obj[category][subCategory]) {
-             copyItem(category, subCategory, item, quantity, newInventory);
+           for (let subItem in obj[category][item]) {
+             copyItem(category, item, subItem, quantity, newInventory);
            }
          } else {
            // Check if input is an item
            for (let subCategory in obj[category]) {
-             for (let item in obj[category][subCategory]) {
-               if (item === input) {
+             for (let subItem in obj[category][subCategory]) {
+               if (subItem === item) {
+                //copy all items under the item
                  copyItem(category, subCategory, item, quantity, newInventory);
                }
              }
@@ -280,14 +326,15 @@ function createNewInventory(obj, inputs) {
          }
        }
      }
+     randomizeEvery = false; //if 'every' keyword was found in this input, set flag back to false to reset it for the next input
   }
  
   // Return the new inventory
   return newInventory;
- } */
+ }
 
- let tutorialInventory = createNewInventory(globalInventory, ['consumables', 'basicSword']);
-
+ let tutorialInventory = createNewInventory(globalInventory, [['weapons', 4, 8, 'Every'],['consumables', '3-5', 'every'], ['healthPotion', 5],/* ['weapons', 2],['consumables'],['basicSword', 4],['healthPotion', 5] */]);
+//add all/every keywords. All indicates all of these items have the same random outcome, every means every item has its own random outcome.
  /* tutorialInventory = createNewInventory(globalInventory, ['basic-sword']) */
  console.log(tutorialInventory);
 
@@ -308,16 +355,35 @@ const NPC = {
   'Mason': {
     image: 'images/blacksmith-person-1.png.png',
     messages : {
-      intro : "Welcome to my shop!", //intro of the shop
+      intro : ["Welcome to my shop!"], //intro of the shop
       purchase : ["Thanks for the purchase!", "Good find!"], //after purchasing
       sell : ["What have we got here?", "Just what i needed!"],  //selling to shop
-      outOfCurrency : ["My prices displayed are final."], //trying to buy an item with 0 currency
-      outOfStock : "Sorry, we've run out of stock for that item.", //no more inventory
-      hover : "What are ya lookin for traveler?", //after hovering over 3 items
-      leave : "Don't be a stranger. ", //leaving the shop 
+      outOfCurrency : ["My prices displayed are final.", "You don't have enough for that!"], //trying to buy an item with 0 currency
+      outOfStock : ["Sorry, we've run out of stock for that item."], //no more inventory
+      hover : ["What are ya lookin' for traveler?"], //after hovering over 3 items
+      leave : ["Don't be a stranger."], //leaving the shop 
     }
   }
 };
+
+function getRandomElementFromArray(array) {
+  let randomIndex;
+  let randomValue;
+  if (typeof array[0] === 'string' && array[0].includes('-')) {
+    const parts = array[0].split('-').map(Number);
+    const min = Math.min(...parts);
+    const max = Math.max(...parts);
+    randomValue = Math.floor(Math.random() * (max - min + 1)) + min;
+    return randomValue;
+  }
+  else{
+    randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
+  }
+  
+}
+
+console.log(getRandomElementFromArray([1,3,5]));
 populateNav(tutorialInventory);
 populateGrid(tutorialInventory);
 populateNPC('Mason');
@@ -340,20 +406,23 @@ function grabData(objInventory, itemDescription, event){
     
     if(num == 0){
       console.log("error: We are out of stock!");
+      displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.outOfStock), 0, 22);
       return;
     }
     if (currency.innerText == 0){
       console.log("error: You don't have enough money to buy that!")
+      displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.outOfCurrency), 0, 22);
       return;
     }
     else{
       if((parseInt(currency.innerText, 10) - price) < 0){
         console.log("error: You don't have enough money to buy that!")
+        displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.outOfCurrency), 0, 22);
         return;
       }
       else{
         //WE WILL NOT SUBTRACT FROM SHOP INVENTORY OBJECT ONLY BY VALUE ON THE SHOP STATICALLY, BECAUSE ALL SHOPS ARE ONLY VISITED ONCE. 
-        
+        displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.purchase), 0, 22);
         num-= 1;
         console.log('num' + num)
         /* console.log((quantity.innerText).match(/\d+/)); */
@@ -680,16 +749,24 @@ function populateInventoryItemFromImg(objInventory, image){
 
             container.appendChild(hoverContent);
             container.appendChild(createItemImage(image));
+            container.appendChild(createItemQuantity(inventory[category][itemType][itemName]['quantity']));
             container.appendChild(createItemPrice(objInventory[category][itemType][itemName]['sellPrice']));
-
             gridContainer.appendChild(container);
+
+            gridContainer.querySelector('.item-wrapper img[src="' + image + '"]').parentNode.querySelector('.banner').classList.add('hidden');
+            
           }
           else{
             inventory[category][itemType][itemName]['quantity'] += 1;
             console.log(inventory)
+            const container = gridContainer.querySelector('.item-wrapper img[src="' + image + '"]').parentNode;
+
+            const quantitySpan = container.querySelector('.banner').querySelector('.quantity-item');
+            quantitySpan.innerText = 'x' + inventory[category][itemType][itemName]['quantity'];
+
             if (inventory[category][itemType][itemName]['quantity'] > 1) {
-              const container = gridContainer.querySelector('.item-wrapper img[src="' + image + '"]').parentNode
-              //REMEMBER THIS REFERS TO THE ITEMWRAPPER THAT HAS THE IMG IMAGE TARGETED, THEN WE TARGET THE PARENT NODE TO GRAB ITS CONTAINER.
+              container.querySelector('.banner').classList.remove('hidden');
+              /* //REMEMBER THIS REFERS TO THE ITEMWRAPPER THAT HAS THE IMG IMAGE TARGETED, THEN WE TARGET THE PARENT NODE TO GRAB ITS CONTAINER.
               console.log('container: ', container)
               if (container.querySelector('.quantity-item') == undefined) { //if our container does not find a quantity-item that means we havent created a quantity indicator
                 const quantitySpan = document.createElement('span');
@@ -700,7 +777,7 @@ function populateInventoryItemFromImg(objInventory, image){
               else {
                 const quantitySpan = container.querySelector('.quantity-item');
                 quantitySpan.innerText = 'x' + inventory[category][itemType][itemName]['quantity'];
-              }
+              } */
             }
           }
         }
@@ -712,7 +789,7 @@ function populateInventoryItemFromImg(objInventory, image){
 
 function createHoverContent(objInventory, itemName, itemType, itemDescription, itemRarity){
   const hoverContent = document.createElement('div');
-    hoverContent.style.backgroundColor = 'rgba(0,0,0,0.8)';
+    /* hoverContent.style.backgroundColor = 'rgba(0,0,0,0.8)'; */
     hoverContent.classList.add('hover-content');
 
     const hoverWrapper = document.createElement('article');
@@ -738,7 +815,22 @@ function createHoverContent(objInventory, itemName, itemType, itemDescription, i
 
       hoverContent.appendChild(hoverWrapper);
   
-    const buyCoin = createCoin('green-coin', '', (event) => grabData(objInventory, itemDescription, event));
+    const buyCoin = createCoin('green-coin', '', (event) => {
+        clearText();
+        /* console.log(event.target.parentNode.parentNode.parentNode.parentNode);
+        if(!event.target.parentNode.parentNode.querySelector('.out-of-stock').classList.contains('hidden')){
+          //if our sold out banner does not contain hidden, it means its shown 
+          displayTextWithTypewriter(".textBubble", NPC['Mason'].messages.outOfStock, 0, 22);
+          //display sold out text 
+        }
+        else if(document.querySelector('#currency-amount') == 0){
+          
+        }
+        else{
+          displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.purchase), 0, 22);
+        } */
+        grabData(objInventory, itemDescription, event);
+      });
     hoverContent.appendChild(buyCoin);
   
     const exitCoin = createCoin('red-coin', '', () => hoverContent.style.display = 'none');
@@ -757,23 +849,45 @@ function createCoin(coinClass, price, clickHandler) {
   return coin;
 }
 
+// Global mouseLeave counter variable
+let mouseLeaveCounter = 0;
+function checkMouseLeaveCounter() {
+  if (mouseLeaveCounter == 6) {
+    clearText();
+    console.log('hi');
+    displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.hover), 0, 22);
+    mouseLeaveCounter = 0;
+  }
+}
+
 function createItemContainer(category) {
   const container = document.createElement('article');
   container.classList.add('item-wrapper');
   container.classList.add(category);
   container.addEventListener('mousemove', () => container.querySelector('.hover-content').style.display = 'block');
-  container.addEventListener('mouseleave', () => container.querySelector('.hover-content').style.display = 'none');
+  container.addEventListener('mouseleave', () => {
+
+    container.querySelector('.hover-content').style.display = 'none';
+    mouseLeaveCounter++;
+    console.log(`Mouse Leave Count: ${mouseLeaveCounter}`);
+
+    checkMouseLeaveCounter();
+  });
   return container;
 }
 
 function createItemQuantity(quantity){
-    const span = document.createElement('span');
-    span.innerText = 'x' + quantity;
-    span.classList.add('quantity-item');
-    if(quantity < 2){ //if quantity is 1 or 0, don't show the quantity visual.
-      span.classList.toggle('hidden'); 
-    }
-    return span;
+  const banner = document.createElement('div'); 
+  banner.classList.add('banner');//apply drop-shadow here
+
+  const span = document.createElement('span'); 
+  span.innerText = 'x' + quantity;
+  span.classList.add('quantity-item');//apply clip-path here, since it interferes with the drop-shadow
+  banner.appendChild(span);
+  if(quantity < 2){ //if quantity is 1 or 0, don't show the quantity visual.
+    banner.classList.toggle('hidden'); 
+  }
+  return banner;
 }
 function createItemImage(imageSrc) {
   const img = document.createElement('img');
@@ -798,6 +912,10 @@ function removeInventoryItemFromImg(image) {
   const gridContainer = document.querySelector('#inventory-grid');
   const containerToRemove = gridContainer.querySelector('.item-wrapper img[src="' + image + '"]').parentNode
 
+  const banner = containerToRemove.querySelector('.banner');
+  const quantity = banner.querySelector('.quantity-item');
+  
+  console.log(quantity);
   console.log('Container to remove:', containerToRemove);
   console.log('inventory', inventory);
 
@@ -807,26 +925,36 @@ function removeInventoryItemFromImg(image) {
         const currentItem = inventory[category][itemType][itemName];
 
         if (currentItem['image'] === image) {
-          currentItem['quantity'] -= 1;
+          currentItem['quantity'] -= 1; //we are subtracting our quantity
 
           console.log('Quantity after decrement:', currentItem['quantity']);
+          
+          quantity.innerText = 'x' + currentItem['quantity'];
 
-          const quantity = containerToRemove.querySelector('.quantity-item');
-
-          if (currentItem['quantity'] > 1) {
+          if(currentItem['quantity'] < 2){
+            banner.classList.add('hidden'); 
+          }
+          if(currentItem['quantity'] === 0){
+            gridContainer.removeChild(containerToRemove);
+            delete inventory[category][itemType][itemName];
+          } 
+          
+          /* if (currentItem['quantity'] > 1) { 
+            
             if (quantity) {
               quantity.innerText = 'x' + currentItem['quantity'];
             } else {
-              const quantitySpan = document.createElement('span');
-              quantitySpan.innerText = 'x' + currentItem['quantity'];
-              quantitySpan.classList.add('quantity-item');
-              containerToRemove.appendChild(quantitySpan);
+              // const quantitySpan = document.createElement('span');
+              //quantitySpan.innerText = 'x' + currentItem['quantity'];
+              //quantitySpan.classList.add('quantity-item');
+              //containerToRemove.appendChild(quantitySpan); 
+              containerToRemove.appendChild(createItemQuantity(currentItem['quantity']));
             }
           } else {
             // Remove quantity item and update container
             if (quantity) {
               quantity.innerText = '';
-              containerToRemove.removeChild(quantity);
+              containerToRemove.removeChild(banner);
             }
           }
 
@@ -834,7 +962,7 @@ function removeInventoryItemFromImg(image) {
           if (currentItem['quantity'] === 0) {
             gridContainer.removeChild(containerToRemove);   //remove item from inventory grid
             delete inventory[category][itemType][itemName]; //delete from inventory object 
-          }
+          } */
         }
       }
     }
@@ -850,6 +978,15 @@ function populateNPC(name){
   image.classList.add('npc');
   image.classList.add('flipX');
   image.id = name;
+
+  const speechBubble =  document.createElement('div');
+  speechBubble.classList.add('textBubble');
+
   npc.appendChild(image);
+  npc.appendChild(speechBubble);
+
+  // Dispatch a custom event to signal that NPC has been populated
+  const npcPopulatedEvent = new Event('npcPopulated');
+  document.dispatchEvent(npcPopulatedEvent);
 }
 

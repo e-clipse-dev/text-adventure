@@ -50,11 +50,32 @@ body{
 /* #hover-data{
     position: absolute;
 } */
+.item-wrapper{
+    position: relative;
+    border-radius: 10%;
+    background: rgba(219, 190, 150, 0.5);
+    border: 5px inset rgb(180, 113, 87);
+    /* border: 5px inset rgb(180, 113, 87); */
+    /* overflow: hidden; */
+}
+.item-wrapper img{
+    display: block;
+    position: relative;
+    background: transparent;
+    filter: drop-shadow(4px 4px 0 rgba(0,0,0,0.5));
+    -webkit-filter: drop-shadow(4px 4px 0 rgba(0,0,0,0.5));
+}
 
 .hover-content{
     position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    outline: 5px solid rgba(0,0,0,0.8);
     display: none;
     background-color: rgba(0,0,0,0.8);
+    /* border: 5px solid transparent; */
     border-radius: 10%;
     height: 100%;
     width: 100%;
@@ -188,24 +209,15 @@ body{
 }
 
 
-.item-wrapper{
-    position: relative;
-    border-radius: 10%;
-    background: transparent; 
-    /* border: 5px inset rgb(180, 113, 87); */
-    /* overflow: hidden; */
-}
-
 .out-of-stock{
     position:absolute;
     width: 102%;
     font-size: 3rem;
     text-align: center;
-    background: linear-gradient(90deg, rgba(253,29,29,1) 0%, rgba(249,84,84,1) 25%, rgba(249,84,84,1) 75%, rgba(253,29,29,1) 100%);
+    background: linear-gradient(90deg, #91172b 0%, #b01c32 25%, #b01c32 75%, #91172b 100%);
     border-top: 3px dashed black;
     border-bottom: 3px dashed black;
-    outline: 3px solid rgba(253,29,29,1);
-    z-index: 500;
+    outline: 3px solid #91172b;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-5deg);
@@ -218,12 +230,15 @@ body{
     -moz-border-radius: 25% 15% 25% 15%;
     -ms-border-radius: 25% 15% 25% 15%;
     -o-border-radius: 25% 15% 25% 15%;
+    filter: drop-shadow(0 35px 2px rgba(0, 0, 0, 0.5));
+    -webkit-filter: drop-shadow(0 35px 2px rgba(0, 0, 0, 0.5));
+    z-index: 500;
 }
 .shop-item {
     color: white;
-    background: rgb(219, 190, 150, 0.5);
-    border: 5px inset rgb(180, 113, 87); /* #ccc */
-    padding: 10px;
+    /* background: rgb(219, 190, 150, 0.5); */
+    /* border: 5px inset rgb(180, 113, 87); */
+    /*#ccc*/padding: 10px;
     text-align: center;
     border-radius: 10%;
     image-rendering: pixelated;
@@ -233,6 +248,7 @@ body{
     width: 100%;
     object-fit: contain;
     position: relative;
+    
 }
 
 
@@ -274,25 +290,23 @@ body{
     font-weight:700;
     font-style: italic;
     font-size: 1.5rem;
-    color: /* rgba(242,215,50,1); */ black;
-    /* background: radial-gradient(gold, rgb(255, 174, 0)); */
-    /* border:solid rgb(255, 174, 0); */
-    /* border-radius: 15px; */
-    /* padding: 2% 5%; */
+    color: black;
+
     padding-right: 2.5%;
     width: 40px;
     height: 40px;
- 
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center; /* Optional: Align text center */
+    text-align: center;
     background-image: url('images/gold-coin.png');
     background-repeat: no-repeat;
     background-size: contain;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
+    filter: drop-shadow(2px 3px 0px rgba(0, 0, 0, 0.5));
+    -webkit-filter: drop-shadow(2px 3px 0px rgba(0, 0, 0, 0.5));
     z-index: 1001;
 }
 
@@ -387,25 +401,64 @@ body{
       box-shadow: inset 0px 0px 2px 2px rgba(150, 150, 150, .05);
       } */
 
-.quantity-item{
+.banner{
+    display: flex;
+    position: absolute;
+    top: -3.5%;
+    left: 5%;
+    filter: drop-shadow(2px 3px 0px rgba(0, 0, 0, 0.5));
+    -webkit-filter: drop-shadow(2px 3px 0px rgba(0, 0, 0, 0.5));
+    z-index: 500;
+    
+}
+.banner .quantity-item{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:black;
+    font-size: 1.75rem;
+    text-align:center;
+    font-weight: bold;
+    background: linear-gradient(to top,#911750, #b01c61);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 8px), 0 100%);
+    min-height: 50px;
+    width: 40px;
+    border-radius: 5% 5% 0 0;
+    -webkit-border-radius: 5% 5% 0 0;
+    -moz-border-radius: 5% 5% 0 0;
+    -ms-border-radius: 5% 5% 0 0;
+    -o-border-radius: 5% 5% 0 0;
+    box-sizing: border-box;
+}
+/* .quantity-item{
     font-size: 1.75rem;
     font-weight: bolder;
     position: absolute;
-    top: 0;
+    top: -2px;
     left: 12px;
     color: black;
-    background: /* rgb(180, 113, 87) */ radial-gradient(circle, rgba(252,128,88,1) 0%, rgba(243,56,9,1) 100%);
-    /*border:solid red;
-    border-radius: 15px;
-    */padding: 7% 5% 2% 5% ;
-    border-radius: 0 0 15% 15%;
-    -webkit-border-radius: 0 0 15% 15%;
-    -moz-border-radius: 0 0 15% 15%;
-    -ms-border-radius: 0 0 15% 15%;
-    -o-border-radius: 0 0 15% 15%;
+    background-color: radial-gradient(circle, rgb(252, 121, 88) 0%, rgb(243, 44, 9)100%) blue;
+    padding: 0;
+    height: 50px;
+    width: 35px;
+    text-align: center;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 8px), 0 100%);
     z-index: 500;
-}
+    
+    source:https://codepen.io/crayon-code/pen/vYXpmPB
+} */
 
+/* .triangle .triangle-bottom-left {
+    position: absolute;
+    left: 0;
+    border-bottom: 100px solid #32557f;
+    border-right: 100px solid transparent;
+  }
+  
+  .triangle .triangle-bottom-right {
+    border-bottom: 100px solid #32557f;
+    border-left: 100px solid transparent;
+  } */
 /* #shop-buttons{
     padding: 1%;
     width: 100%;
@@ -561,6 +614,7 @@ body{
 #npc{
     align-self: flex-end;
     /* border: solid white; */
+    position: relative;
 }
 .npc{
     image-rendering: pixelated;
@@ -575,7 +629,62 @@ body{
     object-position: 50% 0%;
     transform: scale(-3, 3); */
 }
-
+/* .textBubble{
+    height: 50px;
+    width: 300px;
+    background: white;
+    transition: opacity  0.5s ease, visibility  0.5s ease;
+} */
+/* .textBubble {
+    width: 10rem;
+    background: #000;
+    position: relative;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+    border-radius: 0.3rem;
+    transition: opacity  0.5s ease, visibility  0.5s ease;
+  }
+  
+  .textBubble::after {
+    content: '';
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    background: #000;
+    position: absolute;
+    bottom: -1rem;
+    left: calc(50% - 0.5rem);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  } */
+.textBubble {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    padding: 10px;
+    width: 300px;
+    height: 100px;
+    margin: 20px;
+    transform: translate(-50%, -20%);
+    -webkit-transform: translate(-50%, -20%);
+    -moz-transform: translate(-50%, -20%);
+    -ms-transform: translate(-50%, -20%);
+    -o-transform: translate(-50%, -20%);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity  0.5s ease, visibility  0.5s ease;
+}
+.textBubble:before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 10px solid transparent;
+    border-bottom-color:#f0f0f0;
+}
 @media screen and (max-width: 1740px){
     /* #category-navbar{
         flex-wrap: wrap;
