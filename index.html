@@ -6,13 +6,12 @@
     <link rel="stylesheet" href="style.css">
     <title>Document</title>
     <script type="module" src="script.js"></script>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rpg-awesome/0.2.0/css/rpg-awesome.min.css" integrity="sha512-01mG/8rtthZxcE/oLY/1aVBq0UHYxd3r9MgSi33zFQ190gj+BfHY8XeoFiErGyVt1pE68U6InjMq+xkVTSf6yg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-<body>
+<body id="shake-target">
     <section id="npc">
         <!-- <div class="textBubble"></div> -->
     </section>
@@ -20,22 +19,15 @@
 
     </section> -->
     <div id="shop-wrapper">
-        <section id="category-navbar">
+        <!-- <section id="category-navbar">
             <article id="all-category" class="category-nav">All</article>
-        </section>
-        <section id='shop-grid' >
             
-        </section>
-        
-        <section id='inventory-grid' class="hidden">
-
-        </section>
-        <div id='chains-container'>
-            <section id="chains">
-
-            </section>
-            <!-- <img id='chains' src='images/shop-chains.png' alt='Chains Image'> -->
-        </div>
+        </section> -->
+        <section id="category-shop-navbar" class="category-navbar"></section>
+        <section id="category-inv-navbar" class = "hidden category-navbar" ></section>
+        <section id="shop-grid"></section>
+        <section id="inventory-grid" class="hidden"></section>
+        <div id='chains-container'><section id="chains"></section></div>
         <section id="shop-buttons">
             <section id="shop-button-board">
                 <button id="buy-button"><span>Buy</span></button>
@@ -53,6 +45,7 @@
             </div>
             <button id="sell-button">Sell</button> -->
         </section>
+        <button onclick="shakeElement()">Shake here</button>
     </div>
     <script src="typewriter.js"></script>
 </body>

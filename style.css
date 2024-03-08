@@ -1,3 +1,7 @@
+
+/* ---------------------------------------------------------------------------------------------- */
+/*                                           GLOBAL CSS                                           */
+/* ---------------------------------------------------------------------------------------------- */
 *{
     box-sizing: border-box;
 }
@@ -10,10 +14,40 @@
 ::-ms-scrollbar{ /*ie and microsoft edge*/
     width: 0px;
 }
-
+.hidden{
+    display: none !important;
+}
 .flipX{
     transform:scaleX(-1);
 }
+@keyframes shake {
+    0%,  100% { transform: translateX(0); -webkit-transform: translateX(0); -moz-transform: translateX(0); -ms-transform: translateX(0); -o-transform: translateX(0); }
+    10%,  30%,  50%,  70%,  90% { transform: translateX(20px); -webkit-transform: translateX(20px); -moz-transform: translateX(20px); -ms-transform: translateX(20px); -o-transform: translateX(20px); }
+    20%,  40%,  60%,  80% { transform: translateX(-20px); -webkit-transform: translateX(-20px); -moz-transform: translateX(-20px); -ms-transform: translateX(-20px); -o-transform: translateX(-20px); }
+ }
+ @keyframes shake-background {
+    0%,  100% { background-position: 50% 50%; }
+    10%,  30%,  50%,  70%,  90% { background-position:  calc(50% + 10px) 50%; }
+    20%,  40%,  60%,  80% { background-position:  calc(50% - 10px) 50%; } /* Very subtle movement */
+}
+.my-shake {
+    animation-name: shake, shake-background;
+    animation-duration:  0.5s,  0.5s; /* Duration for each animation */
+    animation-timing-function: cubic-bezier(.36,.07,.19,.97), cubic-bezier(.36,.07,.19,.97); /* Timing function for each animation */
+    animation-fill-mode: both; /* Ensure the animation doesn't reset */
+    transform: translate3d(0,   0,   0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* ---------------------------------------------------------------------------------------------- */
+/*                                              BODY                                              */
+/* ---------------------------------------------------------------------------------------------- */
+html, body{
+    width: 100%;
+    height: 100%;
+}
+
 body{
     margin: 0;
     padding: 0;
@@ -24,17 +58,19 @@ body{
     background-position: center;
     background-repeat:no-repeat;
     background-size: cover;
-    /* border: solid black; */
-    width: 100%;
-    height: 100vh;
+    /*border: solid black;
+    *//* width: 100%;
+    min-height: 100vh; */
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'VT323', monospace;
+    overflow: hidden;
 }
-.hidden{
-    display: none !important;
+body.my-shake{
+    overflow: hidden;
 }
+
 /* .sticky{
     position: -webkit-sticky; Safari
     position: sticky;
@@ -65,7 +101,14 @@ body{
     filter: drop-shadow(4px 4px 0 rgba(0,0,0,0.5));
     -webkit-filter: drop-shadow(4px 4px 0 rgba(0,0,0,0.5));
 }
-
+.gray-scale-bg{
+    background: rgba(0, 0, 0, 0.70);
+    border: 5px inset black;
+}
+.gray-scale{
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+}
 .hover-content{
     position: absolute;
     top: 0px;
@@ -113,7 +156,7 @@ body{
 }
 #shop-wrapper{
     width: 25%;
-    height: 50%;
+    height: 40%;
     position: relative;
     /*border: solid black;
     */transition: width 0.5s;
@@ -131,7 +174,10 @@ body{
     will-change: transform;
 }
 
-#category-navbar{
+.all-category::before{
+    content: 'All';
+}
+.category-navbar{
     display: flex;
     font-size: 2rem;
     justify-content: center;
@@ -150,7 +196,8 @@ body{
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
     margin: 0;
-    padding: 5.5%;
+    /* margin-right: 0; */
+    /* padding: 5.5%; */
     padding: 3%;
     display: flex;
     /* flex: 1; */
@@ -158,9 +205,10 @@ body{
     justify-content: center;
     overflow: hidden; /* Hide overflowing content */
     transition: width 1s; /* Apply transition to max-width over 1 second */
-    width: calc(100% / 4); /* Set initial max-width to a small value */
+    /* width: calc(100% / 4); */ /* Set initial max-width to a small value */
     
 }
+
 /* .category-nav::before { //place background color overlay on top of category-nav elements
     content: "";
     position: absolute;
@@ -176,9 +224,9 @@ body{
     width: 100% !important;/* Expand max-width to show the span content */
 }
 
-.category-nav i{
-    margin-right: 5%;
-    font-size: 100%;
+.category-nav .navTextFormatting{
+    margin-left: 2%;
+    /* font-size: 100%; */
 }
 
 #shop-grid, #inventory-grid {
@@ -211,8 +259,8 @@ body{
 
 .out-of-stock{
     position:absolute;
-    width: 102%;
-    font-size: 3rem;
+    width: 105%;
+    font-size: 250%;
     text-align: center;
     background: linear-gradient(90deg, #91172b 0%, #b01c32 25%, #b01c32 75%, #91172b 100%);
     border-top: 3px dashed black;
@@ -261,7 +309,7 @@ body{
     width: 100%;
     padding-top: 32.1691%; /* Set the same aspect ratio here as in the padding-top of the pseudo-element */
    /*  border: 2px solid gold; */
-    z-index:2;
+    z-index:1001;
     pointer-events: none;
     
 }
@@ -686,7 +734,7 @@ body{
     border-bottom-color:#f0f0f0;
 }
 @media screen and (max-width: 1740px){
-    /* #category-navbar{
+    /* .category-navbar{
         flex-wrap: wrap;
     }
     .category-nav{
@@ -750,6 +798,11 @@ body{
     }
 }
 
+/* @media screen and (max-width: 673px){
+    .out-of-stock{
+        font-size: 2rem;
+    }
+} */
 @media screen and (max-width: 430px){ /*IPHONE 14*/
     #shop-wrapper{
         width: 75%;
@@ -789,7 +842,7 @@ body{
         margin-bottom: 0;
         margin-left: 2%;
     }
-    #category-navbar{
+    .category-navbar{
         font-size: 1.8rem;
     }
 }
@@ -804,7 +857,7 @@ body{
     .npc{
         transform: scale(-2, 2);
     }
-    #category-navbar{
+    .category-navbar{
         font-size: 1.5rem;
     }
     .category-nav{

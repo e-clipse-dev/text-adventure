@@ -1,8 +1,7 @@
-console.log('Typewriter code here!!!');
+
 let messageArea;
 document.addEventListener('npcPopulated', function() { //ensure textBubble is created dynamically first before querySelector
     messageArea = document.querySelector(".textBubble");
-    console.log(messageArea);
 });
 let animationTimeout;
 let hideTimeout;
@@ -36,7 +35,7 @@ const displayTextWithTypewriter = (target, message, index, interval, typewriter 
 } */
 // Show text with typewriter effect
 const displayTextWithTypewriter = (target, message, index, interval, typewriter = true) => {
-    mouseLeaveCounter = 0; //reset the counter for hovering typewriter prompt
+
     const messageArea = document.querySelector(target);
 
     clearTimeOuts();
@@ -55,6 +54,11 @@ const displayTextWithTypewriter = (target, message, index, interval, typewriter 
         animationTimeout = setTimeout(() => {
             displayTextWithTypewriter(target, message, index, interval, typewriter);
         }, interval);
+    }
+    else{
+        // This is the last recursive call, reset mouseLeaveCounter here
+        window.mouseLeaveCounter = 0;
+        console.log('Mouse Leave Count:', window.mouseLeaveCounter);
     }
     
   
@@ -85,3 +89,13 @@ const clearText = () => {
     console.log(messageArea.innerText)
     messageArea.innerText = "";
 }
+
+function shakeElement() {
+    var target = document.getElementById('shake-target');
+    target.classList.add('my-shake');
+     
+    // Remove the shake class after the animation ends to allow for re-triggering
+    setTimeout(function() {
+        target.classList.remove('my-shake');
+    },  500); // Match the animation duration
+  }

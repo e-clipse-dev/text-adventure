@@ -1,3 +1,22 @@
+/* ---------------------------------------------------------------------------------------------- */
+/*                                            DEBUGGING                                           */
+/* ---------------------------------------------------------------------------------------------- */
+/* function logVariable(variableName, variable) {
+   console.log(`${variableName}:`, variable);
+} */
+/* // Function to get the variable name
+function getVariableName(variable) {
+  // Convert the variable to a string
+  const variableString = variable.toString();
+   console.log(variableString);
+  // Use a regular expression to extract the variable name from the string representation
+  const match = variableString.match(/^function\s*([^\s(]+)/);
+  // If a match is found, return the variable name, otherwise return 'unknown'
+  return match ? match[1] : 'unknown';
+} */
+/* ---------------------------------------------------------------------------------------------- */
+/*                                           PROTOTYPES                                           */
+/* ---------------------------------------------------------------------------------------------- */
 String.prototype.splitCamelCase = function() {
   return this.replace(/([a-z])([A-Z])/g, '$1 $2');
 }
@@ -5,6 +24,9 @@ String.prototype.splitCamelCase = function() {
 String.prototype.capitalize = function() {
   return this.split(' ').map(word => word[0].toUpperCase() + word.slice(1)).join(' ');
 }
+/* ---------------------------------------------------------------------------------------------- */
+/*                                  GLOBAL SHOP INVENTORY OBJECT                                  */
+/* ---------------------------------------------------------------------------------------------- */
 
 //arrow functions do not have their own 'this' value, and are therefore not able to reference itself. 
 const globalInventory = {
@@ -121,225 +143,24 @@ const globalInventory = {
   materials:{}
 };
 
+function colorExpressions(obj, str) {
+  const styles = { //all the listed styles for colors we want 
+    damage: 'red',
+    power: 'green'
+  };
 
+  Object.entries(styles).forEach(([prop, color]) => { //loop and check for each expression present in our string to replace with. 
+    const regExp = new RegExp(`\\$\\{this\\.${prop}\\}`, 'g');
+    str = str.replace(regExp, `<span style="color:${color};">${obj[prop]}</span>`);
+  });
 
- //CHANGE/ADD INLINE STYLING BEFORE OUR EXPRESSIONS ARE EVALUATED SO WE TURN OUR STRINGS INTO TEMPLATE LITERALS WITH THIS FUNCTION
- function colorExpressions(obj, str) {
-  let result = str;
-  // Replace ${this.damage} with a span styled to display in red
-  result = result.replace(/\$\{this\.damage\}/g, `<span style="color:red;">${obj.damage}</span>`);
-  
-  // Replace ${this.power} with a span styled to display in green
-  result = result.replace(/\$\{this\.power\}/g, `<span style="color:green;">${obj.power}</span>`);
-  
-  // Return the result as a template literal
-  return result;
+  return str;
 }
 
- console.log(globalInventory.consumables.potion["healthPotion"].description());
-/* function createNewInventory(obj, inputs) {
-  // Initialize new inventory object
-  let newInventory = {};
- 
-  // Helper function to copy an item
-  const copyItem = (category, subCategory, item, newInventory) => {
-    // Initialize new object structures in newInventory
-    newInventory[category] = {};
-    newInventory[category][subCategory] = {};
-    newInventory[category][subCategory][item] = {};
-  
-    // Copy properties from original item to newInventory
-    for (let prop in obj[category][subCategory][item]) {
-      newInventory[category][subCategory][item][prop] = obj[category][subCategory][item][prop];
-      console.log(item + ' ' + prop);
-    }
-  };
- 
-  // Check if the input is the entire object
-  if (!inputs) { 
-    //No inputs were given, so the first parameter left is just the obj itself the user wants to copy. 
-    return deepCopy(obj);
-  }
-  // If inputs is not an array, treat it as a single input 
-  if (!Array.isArray(inputs)) {
-  inputs = [inputs];
-  }
-  // Loop over each input
-  for (let input of inputs) {
-    // Check if input is a category
-    if (obj[input]) {
-      // Copy all items under the category
-      for (let subCategory in obj[input]) {
-        for (let item in obj[input][subCategory]) {
-          copyItem(input, subCategory, item, newInventory);
-        }
-      }
-    } else {
-      // Check if input is a subcategory
-      for (let category in obj) {
-        if (obj[category][input]) {
-          // Copy all items under the subcategory
-          for (let item in obj[category][input]) {
-            copyItem(category, input, item, newInventory);
-          }
-        } else {
-          // Check if input is an item
-          for (let subCategory in obj[category]) {
-            for (let item in obj[category][subCategory]) {
-              if (item === input) {
-                copyItem(category, subCategory, input, newInventory);
-              }
-            }
-          }
-        }
-      }
-    }
-  }
- 
-  // Return the new inventory
-  return newInventory;
- }
-*/
- function deepCopy(obj) {
-  let result = Array.isArray(obj) ? [] : {};
-  for (let key in obj) {
-     if (typeof obj[key] === 'function') {
-       result[key] = obj[key];
-     } else if (obj[key] !== null && typeof obj[key] === 'object') {
-       result[key] = deepCopy(obj[key]);
-     } else {
-       result[key] = obj[key];
-     }
-  }
-  return result;
- } 
 
- function createNewInventory(obj, inputs) {
-  // Initialize new inventory object
-  let newInventory = {};
- 
-  let randomizeEvery = false; //flag for checking whether we should randomize for every item in our input
-  // Helper function to copy an item
-  const copyItem = (category, subCategory, item, quantity, newInventory) => {
-     // Initialize new object structures in newInventory
-     newInventory[category] = newInventory[category] || {};
-     newInventory[category][subCategory] = newInventory[category][subCategory] || {};
-     newInventory[category][subCategory][item] = newInventory[category][subCategory][item] || {};
- 
-     // Copy properties from original item to newInventory
-     for (let prop in obj[category][subCategory][item]) {
-      newInventory[category][subCategory][item][prop] = obj[category][subCategory][item][prop];
-     }
- 
-     // Set the quantity
-    if(quantity){ //if quantity is given
-      if(randomizeEvery){
-        console.log('random here');
-        newInventory[category][subCategory][item]['quantity'] = getRandomElementFromArray(quantity);
-      }
-      else{ 
-        console.log('non-random here');
-        newInventory[category][subCategory][item]['quantity'] = quantity;
-      }
-      
-    }
-    else if(quantity == undefined){ //if quantity is not given
-      if (obj[category][subCategory][item]['quantity']) { //grab the original quantity value if it exists
-        newInventory[category][subCategory][item]['quantity'] = obj[category][subCategory][item]['quantity'];
-      } 
-      else{
-        newInventory[category][subCategory][item]['quantity'] = 1; //if no original value exists, set quantity to 1. 
-      }
-      
-    }
-  };
-  
-  // Check if only the obj is given
-  if (!inputs) { 
-    return deepCopy(obj); //copy the entire object instead.
-  }
-  // Loop over each input
-  for (let input of inputs) { 
-    //DETERMINE OUR ITEM AND THE QUANTITIES WE GIVE TO THEM --------------------------------------------------------------------------
-     let item, quantity;
-     item = input[0];
-     if(input.length == 3 || input.length > 2){
-      if(/^every$/i.test(input[input.length - 1])){ //check to see if every is at the last position of our input
-        if(/^\d+-\d+$/.test(input[1])){ //if range is given
-          quantity = [input[1]];
-        }
-        else{ //no range given only numbers for randomization
-          quantity = [...input.slice(1, -1)];
-        }
-        randomizeEvery = true; //flag is turned on to represent that the 'every' keyword was found
-      }
-      else{
-        // Generate a random quantity from the rest of the inputs
-        quantity = getRandomElementFromArray([...input.slice(1)]);
-        console.log('got quantity: ' + quantity);
-      }
-      
-     }
-     else if (input.length == 2) { 
-      console.log(/^\d+-\d+$/.test(input[1]));
-        if(/^\d+-\d+$/.test(input[1])){ //check for 2numbers between a dash
-          
-          quantity = getRandomElementFromArray([input[1]]);
-          console.log(quantity);
-        }
-        else{ //only one quantity was provided
-          console.log('only one quantity provided')
-          quantity = input[1]; 
-          console.log(quantity);
-        }
-     } else { //input.length == 1
-       quantity = undefined; //quantity wasn't given 
-     }
-     //------------------------------------------------------------------------------------------------------------------------------
-
-     // Check if input is a category
-     if (obj[item]) {
-       // Copy all items under the category
-       for (let subCategory in obj[item]) {
-         for (let subItem in obj[item][subCategory]) {
-           copyItem(item, subCategory, subItem, quantity, newInventory);
-         }
-       }
-     } else {
-       // Check if input is a subcategory
-       for (let category in obj) {
-         if (obj[category][item]) {
-           // Copy all items under the subcategory
-           for (let subItem in obj[category][item]) {
-             copyItem(category, item, subItem, quantity, newInventory);
-           }
-         } else {
-           // Check if input is an item
-           for (let subCategory in obj[category]) {
-             for (let subItem in obj[category][subCategory]) {
-               if (subItem === item) {
-                //copy all items under the item
-                 copyItem(category, subCategory, item, quantity, newInventory);
-               }
-             }
-           }
-         }
-       }
-     }
-     randomizeEvery = false; //if 'every' keyword was found in this input, set flag back to false to reset it for the next input
-  }
- 
-  // Return the new inventory
-  return newInventory;
- }
-
- let tutorialInventory = createNewInventory(globalInventory, [['weapons', 4, 8, 'Every'],['consumables', '3-5', 'every'], ['healthPotion', 5],/* ['weapons', 2],['consumables'],['basicSword', 4],['healthPotion', 5] */]);
-//add all/every keywords. All indicates all of these items have the same random outcome, every means every item has its own random outcome.
- /* tutorialInventory = createNewInventory(globalInventory, ['basic-sword']) */
- console.log(tutorialInventory);
-
-console.log(globalInventory);
-
+/* ---------------------------------------------------------------------------------------------- */
+/*                                             OBJECTS                                            */
+/* ---------------------------------------------------------------------------------------------- */
 
 const statusEffects = {
 
@@ -350,7 +171,7 @@ const categoryIcons = {
   materials: 'ra ra-zigzag-leaf',
 }
 
-const inventory = {};
+let inventory = {};
 const NPC = {
   'Mason': {
     image: 'images/blacksmith-person-1.png.png',
@@ -360,293 +181,556 @@ const NPC = {
       sell : ["What have we got here?", "Just what i needed!"],  //selling to shop
       outOfCurrency : ["My prices displayed are final.", "You don't have enough for that!"], //trying to buy an item with 0 currency
       outOfStock : ["Sorry, we've run out of stock for that item."], //no more inventory
-      hover : ["What are ya lookin' for traveler?"], //after hovering over 3 items
+      hover : ["What are ya lookin' for traveler?"], //after hovering over 6 items
       leave : ["Don't be a stranger."], //leaving the shop 
     }
   }
 };
 
+/* ---------------------------------------------------------------------------------------------- */
+/*                                     GLOBAL FUNCTIONS / DATA                                    */
+/* ---------------------------------------------------------------------------------------------- */
+
+//grab a random element from an array, must pass an array to the argument. 
 function getRandomElementFromArray(array) {
   let randomIndex;
   let randomValue;
-  if (typeof array[0] === 'string' && array[0].includes('-')) {
+  if (typeof array[0] === 'string' && array[0].includes('-')) { //if your array includes a dash, infer a randomized range of numbers
     const parts = array[0].split('-').map(Number);
     const min = Math.min(...parts);
     const max = Math.max(...parts);
     randomValue = Math.floor(Math.random() * (max - min + 1)) + min;
     return randomValue;
   }
-  else{
+  else{ //an array full of numbers, will randomize between those numbers
     randomIndex = Math.floor(Math.random() * array.length);
     return array[randomIndex];
   }
-  
 }
 
-console.log(getRandomElementFromArray([1,3,5]));
-populateNav(tutorialInventory);
-populateGrid(tutorialInventory);
-populateNPC('Mason');
-
-function grabData(objInventory, itemDescription, event){
-  console.log(event.target.parentNode.parentNode.querySelector('img')); 
-  //navigate out of our hover-content and select an element from the item-wrapper element.
-  let url = new URL(event.target.parentNode.parentNode.querySelector('img').src);
-  console.log(url.pathname.slice(1))
-  const imgSrc = url.pathname.slice(1); //grab the image pathing only
-  const price = parseInt(event.target.parentNode.parentNode.querySelector('.item-wrapper > .coin').innerText, 10);
-  const currency = document.querySelector('#currency-amount') 
-  console.log(event.target.parentNode.parentNode.parentNode.id == 'shop-grid');
-
-  if(event.target.parentNode.parentNode.parentNode.id == 'shop-grid'){ //check if you are on the shop-grid
-    const quantity = event.target.parentNode.parentNode.querySelector('.quantity-item');
-    const container = event.target.parentNode.parentNode;
-    var soldOut = container.querySelector('.out-of-stock');
-    let num = parseInt(quantity.innerText.match(/\d+/)); //match any numbers for our quantity
-    
-    if(num == 0){
-      console.log("error: We are out of stock!");
-      displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.outOfStock), 0, 22);
-      return;
-    }
-    if (currency.innerText == 0){
-      console.log("error: You don't have enough money to buy that!")
-      displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.outOfCurrency), 0, 22);
-      return;
-    }
-    else{
-      if((parseInt(currency.innerText, 10) - price) < 0){
-        console.log("error: You don't have enough money to buy that!")
-        displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.outOfCurrency), 0, 22);
-        return;
-      }
-      else{
-        //WE WILL NOT SUBTRACT FROM SHOP INVENTORY OBJECT ONLY BY VALUE ON THE SHOP STATICALLY, BECAUSE ALL SHOPS ARE ONLY VISITED ONCE. 
-        displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.purchase), 0, 22);
-        num-= 1;
-        console.log('num' + num)
-        /* console.log((quantity.innerText).match(/\d+/)); */
-        quantity.innerText = 'x' + num;
-        //update our new quantity on shop
-        if(num == 1 ){
-          quantity.classList.toggle('hidden');
-        }
-        if(num == 0){
-          // Apply grayscale filter to all elements inside the container
-          
-          var elementsToGray = container.querySelectorAll(':not(.out-of-stock)');
-          for (var i = 0; i < elementsToGray.length; i++) {
-            elementsToGray[i].style.filter = 'grayscale(100%)';
-          }
-
-          // Remove the filter from elements with the 'coin' class
-          
-          soldOut.classList.toggle('hidden');
-          soldOut.style.filter = "none";
-        }
-        console.log('Currency' + currency.innerText);
-        currency.innerText = parseInt(currency.innerText, 10) - price; //subtract item price from user currency
-        console.log(currency.innerText);
-      }
-    }
-    populateInventoryItemFromImg(objInventory, imgSrc); 
-  }
-  else if(event.target.parentNode.parentNode.parentNode.id == 'inventory-grid'){ //check if you are on the inventory-grid
-    console.log('hi');
-    const shopGrid = document.querySelector('#shop-grid');
-    let targetItemWrapper; 
-    let imageUrl;
-    console.log(shopGrid);
-    shopGrid.querySelectorAll('.item-wrapper').forEach(wrapper => { //looping through our #shop-grid Inventory
-      wrapper.querySelectorAll('.shop-item').forEach(image => {
-        imageUrl = new URL(image.src).pathname.slice(1);
-
-        if(imageUrl === imgSrc){
-          targetItemWrapper = image.parentNode; 
-          //We have isolated the correct itemWrapper from #shop-grid here! 
-
-          const quantity = targetItemWrapper.querySelector('.quantity-item');
-          console.log(quantity);
-          let num = parseInt(quantity.innerText.match(/\d+/));
-          num ++;
-          quantity.innerText = 'x' + num;
-          console.log(quantity);
-          if(num == 1){ //remove the out of order red banner and remove the grayscale filter
-            targetItemWrapper.querySelector('.out-of-stock').classList.toggle('hidden');
-            targetItemWrapper.querySelectorAll('*').forEach(element => element.style.filter = "none");
-          }
-          if(num == 2){ //If we have more than 2 quantities then show the quantity visual. 
-            targetItemWrapper.querySelector('.quantity-item').classList.toggle('hidden');
-          }
-        }
-      })
-    })
-    if(!targetItemWrapper){ //if targetItemWrapper is undefined/we were not able to find a match 
-      //we search our globalInventory here and find the object that matches our imgSrc and use the createItemContainer function and append it to our shopInventory. 
-    }
-    currency.innerText = parseInt(currency.innerText, 10) + price;
-    removeInventoryItemFromImg(imgSrc);
-  }
-}
-
-
-//BUY AND SELL BUTTONS
-document.querySelector('#buy-button').addEventListener('click', () => {
-  document.querySelector('#sell-button').classList.add('gray-background')
-  document.querySelector('#buy-button').classList.remove('gray-background')
-  document.querySelector('#shop-grid').classList.remove('hidden')
-  document.querySelector('#inventory-grid').classList.add('hidden')
-})
-
-document.querySelector('#sell-button').addEventListener('click', () =>{
-  document.querySelector('#buy-button').classList.add('gray-background')
-  document.querySelector('#sell-button').classList.remove('gray-background')
-  document.querySelector('#shop-grid').classList.add('hidden')
-  document.querySelector('#inventory-grid').classList.remove('hidden')
-})
-
-
-//CATEGORY NAVIGATION------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-document.querySelector('#all-category').addEventListener('click', () => {
-  showItemsOnly('all');
-  // Remove 'expanded' class from all other .category-nav elements
-  const allCategoryElements = document.querySelectorAll('.category-nav');
-  allCategoryElements.forEach((otherCategoryElement) => {
-    if (otherCategoryElement !== document.querySelector('#all-category')) {
-      otherCategoryElement.classList.remove('expanded');
-    }
+//create an individual item grid box
+function createItemContainer(category) { 
+  const container = document.createElement('article');
+  container.classList.add('item-wrapper');
+  container.classList.add(category);
+  container.addEventListener('mousemove', () => container.querySelector('.hover-content').style.display = 'block');
+  container.addEventListener('mouseleave', () => {
+    container.querySelector('.hover-content').style.display = 'none';
+    window.mouseLeaveCounter++;
+    console.log(`Mouse Leave Count: ${window.mouseLeaveCounter}`);
+    checkMouseLeaveCounter();
   });
-  toggleCategoryText('all')
-});
+  return container;
+}
 
-function populateNav(objInventory){
-  const container = document.getElementById('category-navbar');
-  let numOfNavElements = 1 + Object.keys(objInventory).length;  //the first 1 accounts for the 'all' category nav
+// Global mouseLeave counter variable
+window.mouseLeaveCounter = 0;
+function checkMouseLeaveCounter() {
+  if (window.mouseLeaveCounter == 6) {
+    clearText();
+    displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.hover), 0, 22);
+  }
+}
 
-  document.querySelector('#all-category').style.width = `calc(100%/${numOfNavElements})`;
-  Object.keys(objInventory).forEach(category => {
-    const categoryElement = document.createElement('article');
-    categoryElement.classList.add('category-nav');
-    categoryElement.style.width = `calc(100%/${numOfNavElements})`;
+//create hover content for our grid items
+function createHoverContent(objInventory, itemName, itemType, itemDescription, itemRarity){
+  const hoverContent = document.createElement('div');
+    /* hoverContent.style.backgroundColor = 'rgba(0,0,0,0.8)'; */
+    hoverContent.classList.add('hover-content');
 
-    if (categoryIcons[category]) {
-      const icon = document.createElement('i');
-      const classes = categoryIcons[category].split(' ');
-      icon.classList.add(...classes); // Use the spread operator to add classes individually
-      categoryElement.appendChild(icon);
+    const hoverWrapper = document.createElement('article');
+      hoverWrapper.classList.add('hover-details');
+
+      const itemNameHeading = document.createElement('h2');
+        itemNameHeading.textContent = itemName;
+        /* itemNameHeading.classList.add('sticky'); */
+        hoverWrapper.appendChild(itemNameHeading);
+
+      const typeAndName = document.createElement('p');
+        if (itemRarity) {
+          typeAndName.textContent = `${itemRarity} ${itemType}`;
+        } else {
+          typeAndName.textContent = itemType;
+        }
+        hoverWrapper.appendChild(typeAndName);
+
+      const description = document.createElement('p');
+        description.classList.add('description');
+        description.innerHTML = itemDescription;
+        hoverWrapper.appendChild(description);
+
+      hoverContent.appendChild(hoverWrapper);
+  
+    const buyCoin = createCoin('green-coin', '', (event) => {
+        clearText();
+        grabData(objInventory, event);
+      });
+    hoverContent.appendChild(buyCoin);
+  
+    const exitCoin = createCoin('red-coin', '', () => hoverContent.style.display = 'none');
+    hoverContent.appendChild(exitCoin);
+  
+
+  return hoverContent; 
+}
+
+//creates a coin and adds a class to it. 
+function createCoin(coinClass, price, clickHandler) {
+  const coin = document.createElement('div'); //or span if you want
+  coin.classList.add('coin');
+  coin.classList.add(coinClass);
+  coin.innerText = price;
+  coin.addEventListener('click', clickHandler);
+  return coin;
+}
+
+//creates banner element
+function createItemQuantity(quantity){
+  const banner = document.createElement('div'); 
+  banner.classList.add('banner');//apply drop-shadow here
+
+  const span = document.createElement('span'); 
+  span.innerText = 'x' + quantity;
+  span.classList.add('quantity-item');//apply clip-path here, since it interferes with the drop-shadow
+  banner.appendChild(span);
+  if(quantity < 2){ //if quantity is 1 or 0, don't show the quantity visual.
+    banner.classList.toggle('hidden'); 
+  }
+  return banner;
+}
+
+//creates image element
+function createItemImage(imageSrc) {
+  const img = document.createElement('img');
+  img.src = imageSrc;
+  img.classList.add('shop-item');
+  return img;
+}
+
+//creates price element
+function createItemPrice(price) {
+  const span = document.createElement('span');
+  span.innerText = price;
+  span.classList.add('coin');
+  return span;
+}
+
+const inventoryGrid = document.querySelector('#inventory-grid');
+const shopGrid = document.querySelector('#shop-grid');
+/* ---------------------------------------------------------------------------------------------- */
+/*                                  CREATE NEW INVENTORIES HERE:                                  */
+/* ---------------------------------------------------------------------------------------------- */
+
+ function createNewInventory(obj, inputs) {
+  // Initialize new inventory object
+  let newInventory = {};
+ 
+  let randomizeEvery = false; //flag for checking whether we should randomize for every item in our input
+  
+  // Check if only the obj is given
+  if (!inputs) { 
+    return deepCopy(obj); //copy the entire object instead.
+  }
+  // Loop over each input
+  for (let input of inputs) { 
+    let item = input[0], quantity = determineQuantity(input);
+    copyAllItems(obj,item,quantity);
+
+    if(randomizeEvery){
+      randomizeEvery = false; //if 'every' keyword was found in this input, set flag back to false to reset it for the next input
     }
-    
-    const categoryText = document.createElement('span');
-    /* categoryText.style.border = 'solid black'; */
-    categoryText.innerText = category[0].toUpperCase() + category.slice(1);
-    
-    categoryText.classList.add('hidden');
-    categoryElement.appendChild(categoryText);
-    
-    const categoryExitButton = createCoin('red-coin-nav', '');
-    categoryExitButton.classList.add('hidden');
-    categoryText.appendChild(categoryExitButton);
-    
-    /* console.log(categoryIcons[category])
-    categoryElement.classList.add(categoryIcons[category]); */
+  }
 
-    
-    if(numOfNavElements !== 2){
-      document.querySelector('#all-category').style.display = '';
-      categoryElement.addEventListener('click', () => {
-        showItemsOnly(category);
-
-        const viewportWidth = window.innerWidth;
+  // Return the new inventory
+  return newInventory;
 
 
-        // Remove 'expanded' class from all other .category-nav elements
-        const allCategoryElements = document.querySelectorAll('.category-nav');
-        allCategoryElements.forEach((otherCategoryElement) => {
-          console.log(otherCategoryElement);
-          if (otherCategoryElement !== categoryElement) {
-            otherCategoryElement.classList.remove('expanded');
-            if(viewportWidth <=1740){
-              otherCategoryElement.classList.toggle('hidden');
-            }
-          }else{
-            if(viewportWidth <=1740){
-              categoryExitButton.classList.toggle('hidden');
+  /* ------------------------------------- HELPER FUNCTIONS ------------------------------------- */
+  function copyAllItems(obj,item,quantity){
+    // Check if input is a category
+    if (obj[item]) {
+      // Copy all items under the category
+      for (let subCategory in obj[item]) {
+        for (let subItem in obj[item][subCategory]) {
+          copyItem(item, subCategory, subItem, quantity, newInventory);
+        }
+      }
+    } else {
+      // Check if input is a subcategory
+      for (let category in obj) {
+        if (obj[category][item]) {
+          // Copy all items under the subcategory
+          for (let subItem in obj[category][item]) {
+            copyItem(category, item, subItem, quantity, newInventory);
+          }
+        } else {
+          // Check if input is an item
+          for (let subCategory in obj[category]) {
+            for (let subItem in obj[category][subCategory]) {
+              if (subItem === item) {
+              //copy all items under the item
+                copyItem(category, subCategory, item, quantity, newInventory);
+              }
             }
           }
-        });
-        
-        // Toggle 'expanded' class for the clicked .category-nav element
-        toggleCategoryText(categoryText);
-        
-        categoryElement.classList.toggle('expanded');
-          /* categoryText.classList.toggle('hidden'); */
-        
-
-        /* const allCategoryTexts = document.querySelectorAll('.category-nav span');
-        allCategoryTexts.forEach(text => {
-            text.classList.add('hidden');
-        });
-        if(categoryText !== 'all'){
-            categoryText.classList.remove('hidden');
-        } */
-      
-      });
+        }
+      }
     }
-    else{
-      document.querySelector('#all-category').style.display = 'none';
-      categoryElement.style.width = '100%';
-      categoryElement.querySelector('i').style.marginRight = '0';
-      categoryElement.addEventListener('click', () => {
-        categoryText.classList.toggle('hidden');
-      });
-    }
-    
-    container.appendChild(categoryElement);
-  }); 
-};
-
-
-function showItemsOnly(category) {
-  const items = document.querySelectorAll('#shop-grid .item-wrapper');
-  if(category == 'all'){
-    items.forEach(item => {
-      item.style.display = '';
-    })
   }
-  else{
-    items.forEach(item => {
-      console.log(item.classList); // Log the classes of the current item
-      if (!item.classList.contains(category)) {
-        item.style.display = 'none';
-      } else {
-        item.style.display = ''; // Reset display property to its default value
+
+  // Helper function to copy an item
+  function copyItem(category, subCategory, item, quantity, newInventory){
+    initialize();
+    copyProperties();
+    setQuantity();
+
+    function initialize(){// Initialize new object structures in newInventory
+      newInventory[category] = newInventory[category] || {};
+      newInventory[category][subCategory] = newInventory[category][subCategory] || {};
+      newInventory[category][subCategory][item] = newInventory[category][subCategory][item] || {};
+    }
+    function copyProperties(){// Copy properties from original item to newInventory
+      for (let prop in obj[category][subCategory][item]) {
+        newInventory[category][subCategory][item][prop] = obj[category][subCategory][item][prop];
+      }
+    }
+    function setQuantity(){// Set the quantity
+      if(quantity!== undefined){
+        handleQuantityGiven(); //if quantity is given
+      }else{
+        handleQuantityNotGiven(); //if quantity is not given;
+      }
+
+      function handleQuantityGiven(){
+        if(randomizeEvery){ //if flag is true, we randomize
+           console.log('randomize on every input');
+          newInventory[category][subCategory][item]['quantity'] = getRandomElementFromArray(quantity);
+        }
+        else{  //flag is false
+           console.log('randomize all input at the same time');
+          newInventory[category][subCategory][item]['quantity'] = quantity;
+        }
+      }
+      
+      function handleQuantityNotGiven(){
+        if (obj[category][subCategory][item]['quantity']) { //grab the original quantity value if it exists
+          newInventory[category][subCategory][item]['quantity'] = obj[category][subCategory][item]['quantity'];
+        } 
+        else{
+          newInventory[category][subCategory][item]['quantity'] = 1; //if no original value exists, set quantity to 1. 
+        }
+      }
+    }
+  };
+  //DETERMINE OUR ITEM AND THE QUANTITIES WE GIVE TO THEM --------------------------------------------------------------------------
+    function determineQuantity(input){
+      let quantity;
+      if(input.length == 3 || input.length > 2){
+        if(isEvery(input[input.length - 1])){ //check to see if every is at the last position of our input
+          quantity = isRangeGiven(input[1]) ? [input[1]] : [...input.slice(1,-1)];
+          randomizeEvery = true; //flag is turned on to represent that the 'every' keyword was found
+        }
+        else{
+          // Generate a random quantity from the rest of the inputs
+          console.log([...input.slice(1)])
+          quantity = getRandomElementFromArray([...input.slice(1)]);
+        }
+      }
+      else if (input.length == 2) { //item and quantity given only 
+        quantity = isRangeGiven(input[1]) ? getRandomElementFromArray([input[1]]) : input[1];
+      } 
+      else { //input.length == 1, //quantity wasn't given 
+        quantity = undefined; 
+      }
+      return quantity;
+    }
+  //------------------------------------------------------------------------------------------------------------------------------
+
+  
+  //--------------------------------------------------------------------------------------------------------------------------
+  
+  //Helper function check if 'every' keyword is given
+  function isEvery(input){
+    return /^every$/i.test(input);
+   }
+   // Helper function to check if a range is given
+   function isRangeGiven(input) {
+    return /^\d+-\d+$/.test(input);
+   }
+}
+
+
+function deepCopy(obj) {
+  // Check if the input is an array or an object and initialize the result accordingly
+  let result = Array.isArray(obj) ? [] : {};
+   
+  // Iterate through each key in the input object
+  for (let key in obj) {
+    // If the current property is a function, copy it to the result
+    if (typeof obj[key] === 'function') {
+      result[key] = obj[key];
+    }  
+    // If the current property is an object (but not null), recursively call deepCopy to copy it
+    else if (obj[key] !== null && typeof obj[key] === 'object') {
+      result[key] = deepCopy(obj[key]);
+    }  
+    // Otherwise, simply assign the value to the result
+    else {
+      result[key] = obj[key];
+    }
+  }
+   
+  // Return the fully copied object
+  return result;
+}
+
+let tutorialInventory = createNewInventory(globalInventory, [['consumables', 2, 5, 'every']/* ,['weapons', 3],['basicSword', 2] */]);
+inventory = createNewInventory(globalInventory, [['basicSword', 2]]);
+
+console.group('CREATING A NEW SHOP INVENTORY OBJECT...');
+   console.log('New Object created from: ', {globalInventory});
+   console.log('New Object is called: ', {tutorialInventory});
+console.groupEnd();
+
+/* ---------------------------------------------------------------------------------------------- */
+/*                             START CREATING OUR SHOP INVENTORY HERE:                            */
+/* ---------------------------------------------------------------------------------------------- */
+const shopNavBar = document.querySelector('#category-shop-navbar');
+const invNavBar = document.querySelector('#category-inv-navbar');
+console.group('CREATING OUR GRID...');
+  console.log('Shop Object Used: ', {tutorialInventory})
+  console.log('NPC Present: Mason');
+
+  populateNav(shopNavBar, tutorialInventory);
+  populateNav(invNavBar, inventory);
+  populateGrid(shopGrid,tutorialInventory);
+  populateGrid(inventoryGrid, inventory);
+  populateNPC('Mason');
+
+
+  //npc gives an intro text speech in the beginning
+  displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.intro), 0, 22);
+console.groupEnd();
+/* ---------------------------------------------------------------------------------------------- */
+/*                           POPULATENAV - CATEGORY NAVIGATION FOR GRID                           */
+/* ---------------------------------------------------------------------------------------------- */
+
+//populate the navigation bar
+function populateNav(nav, objInventory){
+  console.group('POPULATE NAV ON...', nav.id.toUpperCase());
+
+  const container = nav; console.log(container);
+
+  const numOfNavElements = 1 + Object.keys(objInventory).length;
+  console.log('Number of Nav Elements (including "All" category): ', numOfNavElements);
+
+  const allCategoryElement = createAllCategory(numOfNavElements);
+  container.appendChild(allCategoryElement);
+  Object.keys(objInventory).forEach(category => {
+    const categoryElement = createCategoryElement(category, numOfNavElements);
+    container.appendChild(categoryElement)
+  })
+
+  updateCategoryWidths(container, numOfNavElements);
+  updateAllCategoryElement(allCategoryElement, numOfNavElements);
+  console.groupEnd();
+}
+
+function createAllCategory(numOfNavElements){
+  const categoryElement = document.createElement('article');
+  categoryElement.classList.add('category-nav', 'all-category');
+  categoryElement.style.width = `calc(100%/${numOfNavElements})`;
+
+  categoryElement.addEventListener('click', (event) => {
+    const isCategoryShopNav = event.target.closest('#category-shop-navbar');
+    const isCategoryInvNav = event.target.closest('#category-inv-navbar');
+
+    showItemsOnly('all', event);
+
+    // Remove 'expanded' class from all other .category-nav elements
+    let categoryElements;
+    if(isCategoryShopNav){
+      categoryElements = document.querySelectorAll('#category-shop-navbar .category-nav');
+    }
+    if(isCategoryInvNav){
+      categoryElements = document.querySelectorAll('#category-inv-navbar .category-nav')
+    }
+
+    categoryElements.forEach((otherCategoryElement) => {
+      if (otherCategoryElement !== document.querySelector('#all-category')) {
+        otherCategoryElement.classList.remove('expanded');
       }
     });
-  }
+    toggleCategoryText('all', event);
+  });
+  return categoryElement;
 }
-function toggleCategoryText(categoryText) {
-    const allCategoryTexts = document.querySelectorAll('.category-nav span');
+
+//create category elements for our navbars
+function createCategoryElement(category){
+  const categoryElement = document.createElement('article');
+  categoryElement.classList.add('category-nav');
+  categoryElement.classList.add(category);
+  categoryElement.addEventListener('click', (event) => handleCategoryClick(category, categoryElement, event));
+
+  //Append order: icon(i), [category(span), exit button(div)]
+
+  if(categoryIcons[category]){ //if there exists a category from our shop inventory found in the categoryIcons object, create an icon for it. 
+    const icon = createIconElement(categoryIcons[category]); 
+    categoryElement.appendChild(icon); 
+  }
+
+  const categoryText = createCategoryTextElement(category); 
+  const categoryExitButton = createCoin('red-coin-nav', '');
+  categoryExitButton.classList.add('hidden');
+  categoryText.appendChild(categoryExitButton);
+  categoryElement.appendChild(categoryText);
+
+  return categoryElement;
+}
+
+//create icon elements
+function createIconElement(iconClasses){
+  const icon = document.createElement('i');
+  const classes = iconClasses.split(' ');
+  icon.classList.add(...classes);
+  return icon;
+}
+
+//create category text elements
+function createCategoryTextElement(category){
+  const categoryText = document.createElement('span');
+  categoryText.innerText = category[0].toUpperCase() + category.slice(1);
+  categoryText.classList.add('hidden');
+  return categoryText;
+}
+
+function handleCategoryClick(category, categoryElement, event){
+  const isCategoryShopNav = event.target.closest('#category-shop-navbar');
+  const isCategoryInvNav = event.target.closest('#category-inv-navbar');
+
+  showItemsOnly(category, event);
+  const categoryText = categoryElement.querySelector('span');
+  const categoryExitButton = categoryElement.querySelector('.red-coin-nav');
+  const viewportWidth = window.innerWidth;
+
+  // Remove 'expanded' class from all other .category-nav elements
+  let categoryElements;
+  if(isCategoryShopNav){
+    categoryElements = document.querySelectorAll('#category-shop-navbar .category-nav');
+  }
+
+  if(isCategoryInvNav){
+    categoryElements = document.querySelectorAll('#category-inv-navbar .category-nav');
+  }
+  
+  categoryElements.forEach((otherCategoryElement) => {
+     console.log(otherCategoryElement);
+    if (otherCategoryElement !== categoryElement) {
+      otherCategoryElement.classList.remove('expanded');
+      if(viewportWidth <=1740){
+        otherCategoryElement.classList.toggle('hidden');
+      }
+    }else{
+      if(viewportWidth <=1740){
+        categoryExitButton.classList.toggle('hidden');
+      }
+    }
+  });
+  
+  // Toggle 'expanded' class for the clicked .category-nav element
+  toggleCategoryText(categoryText, event);
+  categoryElement.classList.toggle('expanded');
+}
+
+//show which items present on our grid, based on which category element we click on our navbar
+function showItemsOnly(category, event){ //show which items inside grid are being displayed.
+
+  //determine which navigation bar the event target is closest to...
+  const isCategoryShopNav = event.target.closest('#category-shop-navbar');
+  const isCategoryInvNav = event.target.closest('#category-inv-navbar');
+
+  let items; //target the corresponding grid's items in relation to the nav that it is closest to. 
+  if(isCategoryShopNav){
+    items = document.querySelectorAll('#shop-grid .item-wrapper');
+  }
+  if(isCategoryInvNav){
+    items = document.querySelectorAll('#inventory-grid .item-wrapper');
+  }
+  items.forEach(item => {
+    item.style.display = category === 'all' ? '' : item.classList.contains(category) ? '' : 'none';
+  });
+} 
+
+//toggles category text on our navbar
+function toggleCategoryText(categoryText, event) {
+    //determine which navigation bar the event target is closest to...
+    const isCategoryShopNav = event.target.closest('#category-shop-navbar');
+    const isCategoryInvNav = event.target.closest('#category-inv-navbar');
+
+    let allCategoryTexts;
+    if(isCategoryShopNav){
+      console.log('In categoryShop ..... to shop-grid')
+      allCategoryTexts = isCategoryShopNav.querySelectorAll('.category-nav span');
+      
+    }
+
+    if(isCategoryInvNav){
+      console.log('In invShop ..... to inv-grid')
+      allCategoryTexts = isCategoryInvNav.querySelectorAll('.category-nav span');
+    }
+    
     allCategoryTexts.forEach(text => {
         text.classList.add('hidden');
     });
     if(categoryText !== 'all'){
       if(categoryText.parentNode.classList.contains('expanded')){
           categoryText.classList.add('hidden');
+          categoryText.classList.remove('navTextFormatting');
       } 
       else{
         categoryText.classList.remove('hidden');
+        categoryText.classList.add('navTextFormatting');
       }   
     }
 }
 
-function populateGrid(objInventory) {
-  const gridContainer = document.querySelector('#shop-grid');
+//update category widths 
+function updateCategoryWidths(navBar, numOfNavElements){
+  console.log('UPDATING CATEGORY WIDTHS ON...', navBar.id.toUpperCase() + ' to ' + `calc(100%/${numOfNavElements})`);
+  navBar.querySelectorAll('.category-nav').forEach((categoryElement) => {
+    console.log('Affected Category: ', categoryElement);
+    categoryElement.style.width = `calc(100%/${numOfNavElements})`;
+    
+    if(numOfNavElements == 2){ //when 'all' and one specific category present, we make the specific category full width instead. 
+      categoryElement.style.width = `calc(100%/1)`;
+    }
+  })
+}
+
+//updating what should happen to our 'all category' element according to the number of categories present in our nav.
+function updateAllCategoryElement(allCategoryElement, numOfNavElements){
+  if(numOfNavElements > 2){
+    allCategoryElement.style.display = '';
+    console.log('UPDATING ALL CATEGORY TO APPEAR')
+  }
+  else{
+    allCategoryElement.style.display = 'none';
+    console.log('UPDATING ALL CATEGORY TO HIDE')
+  }
+}
+/* ---------------------------------------------------------------------------------------------- */
+/*                            POPULATEGRID - GRID LAYOUT FOR SHOP ITEMS                           */
+/* ---------------------------------------------------------------------------------------------- */
+function populateGrid(grid ,objInventory) {
+  console.group('POPULATE GRID ON...', grid.id.toUpperCase());
+  const gridContainer = grid;
 
   Object.keys(objInventory).forEach(category => {
     Object.keys(objInventory[category]).forEach(itemType => {
       Object.keys(objInventory[category][itemType]).forEach(itemName => {
         const container = createItemContainer(category);
-        console.log(objInventory[category][itemType][itemName].description());
+         console.log(`Created item container: ${itemName}`, container);
         
 
         //create hover content
@@ -689,288 +773,340 @@ function populateGrid(objInventory) {
       });
     });
   });
+  console.groupEnd();
 }
 
-function populateInventoryItemFromImg(objInventory, image){
-  const gridContainer = document.querySelector('#inventory-grid');
-  console.log('image: ' + image)
-  for (let category of Object.keys(objInventory)) {
-    for (let itemType of Object.keys(objInventory[category])) {
-      for (let itemName of Object.keys(objInventory[category][itemType])){
-        if (objInventory[category][itemType][itemName]['image'] === image) {
+/* ---------------------------------------------------------------------------------------------- */
+/*                   GRABDATA - USING DATA FROM OUR SHOP GRID OR INVENTORY GRID                   */
+/* ---------------------------------------------------------------------------------------------- */
 
-          if(!inventory[category]){
-            inventory[category] = {};
-          }
-          if (!inventory[category][itemType]) {
-            inventory[category][itemType] = {};
-          }
-          
-          if (!inventory[category][itemType][itemName]) {
-            inventory[category][itemType][itemName] = {};
-          }
+function grabData(objInventory, event){
+  console.group('GRABBING DATA...')
+  const parentNode = event.target.closest('.item-wrapper');
+   console.log('Selected Item: ', parentNode);
+  const imgElement = parentNode.querySelector('img');
+  const imgSrc = imgElement.src.replace(/.*images/, 'images');
+  const priceElement = parentNode.querySelector(':scope > .coin'); //:scope refers to the context node(parentnode)
+  const price = parseInt(priceElement.innerText, 10);
+  const currencyElement = document.querySelector('#currency-amount');
+  const currency = parseInt(currencyElement.innerText, 10);
+  const quantityElement = parentNode.querySelector('.quantity-item');
+  const quantity = parseInt(quantityElement.innerText.match(/\d+/), 10);
+  const isShopGrid = parentNode.closest('#shop-grid');
+  console.log(isShopGrid);
+  const isInventoryGrid = parentNode.closest('#inventory-grid');
+  
+  if(isShopGrid){
+    handleShopGrid(objInventory, imgSrc, price, quantityElement, quantity, currencyElement, currency, parentNode, event);
+  }
+  else if(isInventoryGrid){
 
-          
-          console.log(inventory)
-          console.log(objInventory)
-          if (!inventory[category][itemType][itemName]['quantity']) {
-            inventory[category][itemType][itemName]['quantity'] = 1;
-            for(let itemKeys of Object.keys(objInventory[category][itemType][itemName])){
-              if(itemKeys !== 'quantity'){
-                inventory[category][itemType][itemName][itemKeys] = objInventory[category][itemType][itemName][itemKeys];
-              }
-              //ensure all key value pairs are placed into the inventory from globalInventory 
-              //copy everything except the quantity because we are purchasing product starting at one. 
-            }
-            /* inventory[category][itemType][itemName]['image'] = image; */
-            //create item container
-            const container = createItemContainer(category);
+    handleInventoryGrid(imgSrc, price, currencyElement, currency, parentNode);
+  }
 
-            //create hover content
-            let hoverContent;
-            if(objInventory[category][itemType][itemName]['rarity']){
-              hoverContent = createHoverContent(
-                objInventory,
-                itemName.splitCamelCase().capitalize(),
-                itemType,
-                objInventory[category][itemType][itemName].description(),
-                objInventory[category][itemType][itemName]['rarity'],
-              )
-            }
-            else{
-              hoverContent = createHoverContent(
-                objInventory,
-                itemName.splitCamelCase().capitalize(),
-                itemType,
-                objInventory[category][itemType][itemName].description()
-              )
-            }
-            
+  console.groupEnd();
+}
 
-            container.appendChild(hoverContent);
-            container.appendChild(createItemImage(image));
-            container.appendChild(createItemQuantity(inventory[category][itemType][itemName]['quantity']));
-            container.appendChild(createItemPrice(objInventory[category][itemType][itemName]['sellPrice']));
-            gridContainer.appendChild(container);
+function handleShopGrid(objInventory, imgSrc, price, quantityElement, quantity, currencyElement, currency, parentNode, event){
+  console.group('USING SHOP-GRID DATA...')
+  if(quantity == 0){
+    console.group('QUANTITY IS 0');
+     console.log('Quantity: ', quantity);
+     console.log("Error: We are out of stock!");
+    displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.outOfStock), 0, 22);
+    console.groupEnd();
+    return;
+  }
 
-            gridContainer.querySelector('.item-wrapper img[src="' + image + '"]').parentNode.querySelector('.banner').classList.add('hidden');
-            
-          }
-          else{
-            inventory[category][itemType][itemName]['quantity'] += 1;
-            console.log(inventory)
-            const container = gridContainer.querySelector('.item-wrapper img[src="' + image + '"]').parentNode;
+  if(currency < price){ //if currency is lower than the price, we are out of currency
+    console.group('NOT ENOUGH PLAYER CURRENCY...')
+     console.log('Currency: ', currency);
+    console.log("error: You don't have enough money to buy that!")
+    displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.outOfCurrency), 0, 22);
+    console.groupEnd();
+    return;
+  }
 
-            const quantitySpan = container.querySelector('.banner').querySelector('.quantity-item');
-            quantitySpan.innerText = 'x' + inventory[category][itemType][itemName]['quantity'];
+  //if none of the above, we are capable of purchasing:
+  console.group('PURCHASING ITEM...');
+  displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.purchase), 0, 22);
 
-            if (inventory[category][itemType][itemName]['quantity'] > 1) {
-              container.querySelector('.banner').classList.remove('hidden');
-              /* //REMEMBER THIS REFERS TO THE ITEMWRAPPER THAT HAS THE IMG IMAGE TARGETED, THEN WE TARGET THE PARENT NODE TO GRAB ITS CONTAINER.
-              console.log('container: ', container)
-              if (container.querySelector('.quantity-item') == undefined) { //if our container does not find a quantity-item that means we havent created a quantity indicator
-                const quantitySpan = document.createElement('span');
-                quantitySpan.innerText = 'x' + inventory[category][itemType][itemName]['quantity'];
-                quantitySpan.classList.add('quantity-item');
-                container.appendChild(quantitySpan);
-              }
-              else {
-                const quantitySpan = container.querySelector('.quantity-item');
-                quantitySpan.innerText = 'x' + inventory[category][itemType][itemName]['quantity'];
-              } */
-            }
-          }
-        }
+   console.log('Quantity: ', quantity);
+   console.log('Player Currency: ', currency);
+   console.log('Subtracting quantity and currency...');
+
+  updateQuantityCount(quantityElement, quantity - 1, parentNode, shopGrid);
+  updateCurrencyAmount(currencyElement, currency - price);
+  console.groupEnd();
+
+  populateItemToPlayer(objInventory, imgSrc, event);
+  console.groupEnd();
+}
+
+function handleInventoryGrid(imgSrc, price, currencyElement, currency, parentNode){
+  console.group('USING INVENTORY GRID DATA...')
+
+  shopGrid.querySelectorAll('.item-wrapper').forEach(wrapper => { //looping through our #shop-grid Inventory to match our event image with the same image on our shop-grid. 
+    wrapper.querySelectorAll('.shop-item').forEach(image => {
+      const imageUrl = image.src.replace(/.*images/, 'images');
+      if (imageUrl === imgSrc) { //we know where to add quantity for which grid tile on our #shop-grid
+        console.log('IMAGE MATCH FOUND...');
+
+        displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.sell),  0,  22);
+        let targetItemWrapper = image.parentNode;
+        const quantityElement = targetItemWrapper.querySelector('.quantity-item');
+        const quantity = parseInt(targetItemWrapper.querySelector('.quantity-item').innerText.match(/\d+/), 10);
+        
+        console.log('Quantity: ', quantity);
+        console.log('Player Currency: ', currency);
+        console.log('Adding quantity(shop grid) and player currency...')
+
+        updateQuantityCount(quantityElement, quantity + 1, parentNode, inventoryGrid );
+        
       }
-    }
-  }
-  console.log(inventory);
-}
-
-function createHoverContent(objInventory, itemName, itemType, itemDescription, itemRarity){
-  const hoverContent = document.createElement('div');
-    /* hoverContent.style.backgroundColor = 'rgba(0,0,0,0.8)'; */
-    hoverContent.classList.add('hover-content');
-
-    const hoverWrapper = document.createElement('article');
-      hoverWrapper.classList.add('hover-details');
-
-      const itemNameHeading = document.createElement('h2');
-        itemNameHeading.textContent = itemName;
-        /* itemNameHeading.classList.add('sticky'); */
-        hoverWrapper.appendChild(itemNameHeading);
-
-      const typeAndName = document.createElement('p');
-        if (itemRarity) {
-          typeAndName.textContent = `${itemRarity} ${itemType}`;
-        } else {
-          typeAndName.textContent = itemType;
-        }
-        hoverWrapper.appendChild(typeAndName);
-
-      const description = document.createElement('p');
-        description.classList.add('description');
-        description.innerHTML = itemDescription;
-        hoverWrapper.appendChild(description);
-
-      hoverContent.appendChild(hoverWrapper);
-  
-    const buyCoin = createCoin('green-coin', '', (event) => {
-        clearText();
-        /* console.log(event.target.parentNode.parentNode.parentNode.parentNode);
-        if(!event.target.parentNode.parentNode.querySelector('.out-of-stock').classList.contains('hidden')){
-          //if our sold out banner does not contain hidden, it means its shown 
-          displayTextWithTypewriter(".textBubble", NPC['Mason'].messages.outOfStock, 0, 22);
-          //display sold out text 
-        }
-        else if(document.querySelector('#currency-amount') == 0){
-          
-        }
-        else{
-          displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.purchase), 0, 22);
-        } */
-        grabData(objInventory, itemDescription, event);
-      });
-    hoverContent.appendChild(buyCoin);
-  
-    const exitCoin = createCoin('red-coin', '', () => hoverContent.style.display = 'none');
-    hoverContent.appendChild(exitCoin);
-  
-
-  return hoverContent; 
-}
-
-function createCoin(coinClass, price, clickHandler) {
-  const coin = document.createElement('div'); //or span if you want
-  coin.classList.add('coin');
-  coin.classList.add(coinClass);
-  coin.innerText = price;
-  coin.addEventListener('click', clickHandler);
-  return coin;
-}
-
-// Global mouseLeave counter variable
-let mouseLeaveCounter = 0;
-function checkMouseLeaveCounter() {
-  if (mouseLeaveCounter == 6) {
-    clearText();
-    console.log('hi');
-    displayTextWithTypewriter(".textBubble", getRandomElementFromArray(NPC['Mason'].messages.hover), 0, 22);
-    mouseLeaveCounter = 0;
-  }
-}
-
-function createItemContainer(category) {
-  const container = document.createElement('article');
-  container.classList.add('item-wrapper');
-  container.classList.add(category);
-  container.addEventListener('mousemove', () => container.querySelector('.hover-content').style.display = 'block');
-  container.addEventListener('mouseleave', () => {
-
-    container.querySelector('.hover-content').style.display = 'none';
-    mouseLeaveCounter++;
-    console.log(`Mouse Leave Count: ${mouseLeaveCounter}`);
-
-    checkMouseLeaveCounter();
+    });
   });
-  return container;
+
+  //outside of loop; incase the player is selling inventory items not present on shop inventory grid. Only the currency is given back, and the item is lost forever after selling.
+  updateCurrencyAmount(currencyElement, currency + price);
+  removeItemFromPlayer(imgSrc);
+  console.groupEnd();
 }
 
-function createItemQuantity(quantity){
-  const banner = document.createElement('div'); 
-  banner.classList.add('banner');//apply drop-shadow here
+function updateQuantityCount(quantityElement, newQuantity, parentNode = null, grid = null){
+   console.log('New Quantity: ' + newQuantity);
+  quantityElement.innerText = 'x' + newQuantity;
+  if(grid){
+    if(grid === shopGrid){ //quantities are always subtracted when we are in the shopGrid
+        const soldOut = parentNode.querySelector('.out-of-stock');
+        if(newQuantity == 1){
+          quantityElement.classList.toggle('hidden');
+          
+          console.log('QUANTITY IS 1...')
+          console.log('REMOVING QUANTITY BANNER...')
+        }
+        if(newQuantity == 0){
+          // Apply grayscale filter to all elements inside the container
+          var elementsToGray = parentNode.querySelectorAll(':not(.out-of-stock)');
+          for (var i = 0; i < elementsToGray.length; i++) {
+            elementsToGray[i].style.filter = 'grayscale(100%)';
+          }
+          parentNode.classList.toggle('gray-scale-bg');
+          // Remove the filter from elements with the 'coin' class
+          soldOut.classList.toggle('hidden');
+          soldOut.style.filter = "none";
 
-  const span = document.createElement('span'); 
-  span.innerText = 'x' + quantity;
-  span.classList.add('quantity-item');//apply clip-path here, since it interferes with the drop-shadow
-  banner.appendChild(span);
-  if(quantity < 2){ //if quantity is 1 or 0, don't show the quantity visual.
-    banner.classList.toggle('hidden'); 
+          console.log('QUANTITY IS 0...');
+          console.log('SOLD OUT BANNER APPEARS...')
+        }
+
+    }
+    else if(grid === inventoryGrid){ //quantities are always being added when we are in the inventoryGrid
+      const targetItemWrapper = quantityElement.parentNode.parentNode;
+       console.log('targeted item wrapper: ', targetItemWrapper);
+      if(newQuantity == 1){
+        targetItemWrapper.querySelector('.out-of-stock').classList.toggle('hidden');
+        targetItemWrapper.querySelectorAll(':not(img)').forEach(element => element.style.filter = 'none');
+        targetItemWrapper.querySelector('img').style.filter = '';
+        targetItemWrapper.classList.toggle('gray-scale-bg');
+      }
+      if(newQuantity == 2){
+        quantityElement.classList.toggle('hidden');
+      }
+    }
   }
-  return banner;
-}
-function createItemImage(imageSrc) {
-  const img = document.createElement('img');
-  img.src = imageSrc;
-  img.classList.add('shop-item');
-  return img;
-}
-
-function createItemPrice(price) {
-  const span = document.createElement('span');
-  span.innerText = price;
-  span.classList.add('coin');
-  return span;
-}
-
-function subtractItemQuantity(quantity){
   
 }
-//REMOVES ITEM FROM INVENTORY GRID AND YOUR INVENTORY OBJECT
-function removeInventoryItemFromImg(image) {
-  console.log('Removing item with image:', image);
+
+function updateCurrencyAmount(currencyElement, newCurrency){
+   console.log('New Player Currency: ', newCurrency);
+  currencyElement.innerText = newCurrency;
+}
+
+function populateItemToPlayer(objInventory, image, event){ //remember event is referring to grab data function (where the player bought from shop-grid)
+  console.group('POPULATING ITEM ON INVENTORY GRID...')
+  
+  const isShopGrid = event.target.closest('#shop-grid');
+  const isInventoryGrid = event.target.closest('#inventory-grid');
+
+  let allCategoryElement; //lets target the correct 'all category' from the respective navbars.
+  if(isShopGrid){
+    allCategoryElement = document.querySelector('#category-inv-navbar .all-category'); 
+    //remember we are checking if were inside shop-grid (and grabbing data from it), if we are, we affect changes in the inventory navbar; 
+  }
+  if(isInventoryGrid){
+    allCategoryElement = document.querySelector('#category-shop-navbar .all-category');
+  }
+  
+
+  const matchingImg = findMatchingImage(objInventory, image);
+
+  if (matchingImg) {
+    const { category, itemType, itemName, itemKeys } = matchingImg;
+    //const item = `${category}.${itemType}.${itemName}`; //this will not work for some reason, maybe reading object literals wrong?
+    initializeInvObj(category, itemType, itemName);
+
+    //add new item onto player inventory
+    if (!inventory[category][itemType][itemName]['quantity']) { //if there is no quantity, we know the item does not exist. 
+      console.log('CREATING ITEM ON PLAYER INVENTORY OBJECT...')
+      inventory[category][itemType][itemName]= {...itemKeys, quantity: 1}; //we set/overwrite the quantity to 1 since the item is appearing for the first time on the player inventory. 
+    
+      console.log('Current Player Inventory: ', inventory);
+      const container = createItemContainer(category);
+
+      /* inventoryNavBar.querySelectorAll('.category-nav')
+      addNavCategory(category); //add a new category to our inventory navbar */
+
+      //create hover content for grid item
+      let hoverContent;
+      if(objInventory[category][itemType][itemName]['rarity']){
+        hoverContent = createHoverContent(objInventory,
+          itemName.splitCamelCase().capitalize(),
+          itemType,
+          objInventory[category][itemType][itemName].description(),
+          objInventory[category][itemType][itemName]['rarity'])
+      }
+      else{
+        hoverContent = createHoverContent(objInventory,
+          itemName.splitCamelCase().capitalize(),
+          itemType
+          ,objInventory[category][itemType][itemName].description());
+      }
+
+      container.appendChild(hoverContent);
+      container.appendChild(createItemImage(image));
+      container.appendChild(createItemQuantity(inventory[category][itemType][itemName]['quantity']));
+      container.appendChild(createItemPrice(objInventory[category][itemType][itemName]['sellPrice']));
+      inventoryGrid.appendChild(container);
+
+      inventoryGrid.querySelector('.item-wrapper img[src="' + image + '"]').parentNode.querySelector('.banner').classList.add('hidden'); //hide quantity banner because quantity is 1
+
+      const numOfNavElements = 1 + Object.keys(inventory).length;
+      /* const categoryElement = handleCategoryElement(category, allCategoryElement, numOfNavElements); */
+
+      
+      const categoryInvNav = document.querySelector('#category-inv-navbar');
+      /* const categoryShopNav = document.querySelector('#category-shop-navbar'); */
+
+      //adding new category 
+      if(!categoryInvNav.querySelector(`.${category}`)){ //if the category does not exist in the navbar, create one. 
+        const categoryElement = createCategoryElement(category);
+        console.log('num of navs: ', numOfNavElements);
+        if(isShopGrid){
+          categoryInvNav.appendChild(categoryElement);
+        }
+        if(isInventoryGrid){
+          isInventoryGrid.appendChild(categoryElement);
+        }
+        updateCategoryWidths(categoryInvNav, numOfNavElements);
+        updateAllCategoryElement(allCategoryElement, numOfNavElements);
+      }
+    }
+    else{ //item is already in the inventory, increment its quantity instead.
+       console.log('Existing item found on player inventory and grid...');
+       console.log('Original Quantity: ' + inventory[category][itemType][itemName]['quantity']);
+       console.log('Current Player Inventory: ', inventory);
+       console.log('Adding quantity...')
+
+      inventory[category][itemType][itemName]['quantity'] += 1; 
+      let quantity = inventory[category][itemType][itemName]['quantity'];
+      const container = inventoryGrid.querySelector('.item-wrapper img[src="' + image + '"]').parentNode;
+      const quantitySpan = container.querySelector('.banner').querySelector('.quantity-item');
+      updateQuantityCount(quantitySpan, quantity);
+
+      if (quantity > 1) {
+        console.log('QUANTITY BANNER APPEARS ON INVENTORY GRID...')
+        container.querySelector('.banner').classList.remove('hidden');
+      }
+    }
+  }
+  console.groupEnd();
+}
+
+function removeItemFromPlayer(image){
+  console.group('REMOVING ITEM FROM INVENTORY GRID...')
   const gridContainer = document.querySelector('#inventory-grid');
-  const containerToRemove = gridContainer.querySelector('.item-wrapper img[src="' + image + '"]').parentNode
-
-  const banner = containerToRemove.querySelector('.banner');
-  const quantity = banner.querySelector('.quantity-item');
+  const categoryInvNav = document.querySelector('#category-inv-navbar');
+  const containerToRemove = gridContainer.querySelector('.item-wrapper img[src="' + image + '"]').parentNode;
   
-  console.log(quantity);
-  console.log('Container to remove:', containerToRemove);
-  console.log('inventory', inventory);
+  const banner = containerToRemove.querySelector('.banner');
+  const quantityElement = banner.querySelector('.quantity-item');
+  const matchingImg = findMatchingImage(inventory, image);
+  if(matchingImg){
+    const { category, itemType, itemName, itemKeys } = matchingImg;
+    console.log('category: ', category);
 
-  for (let category of Object.keys(inventory)) {
-    for (let itemType of Object.keys(inventory[category])) {
-      for (let itemName of Object.keys(inventory[category][itemType])) {
-        const currentItem = inventory[category][itemType][itemName];
+    //we cannot querySelect innerTexts of elements, so lets use filter instead. 
+    const categoryToRemove = categoryInvNav.querySelector(`.${category}`);
+    console.log('removing category: ', categoryToRemove);
 
-        if (currentItem['image'] === image) {
-          currentItem['quantity'] -= 1; //we are subtracting our quantity
+    console.log('Original Quantity: ', inventory[category][itemType][itemName]['quantity']);
+    console.log('Subtracting quantity from inventory grid item...');
 
-          console.log('Quantity after decrement:', currentItem['quantity']);
-          
-          quantity.innerText = 'x' + currentItem['quantity'];
+    inventory[category][itemType][itemName]['quantity'] -= 1;
 
-          if(currentItem['quantity'] < 2){
-            banner.classList.add('hidden'); 
-          }
-          if(currentItem['quantity'] === 0){
-            gridContainer.removeChild(containerToRemove);
-            delete inventory[category][itemType][itemName];
-          } 
-          
-          /* if (currentItem['quantity'] > 1) { 
-            
-            if (quantity) {
-              quantity.innerText = 'x' + currentItem['quantity'];
-            } else {
-              // const quantitySpan = document.createElement('span');
-              //quantitySpan.innerText = 'x' + currentItem['quantity'];
-              //quantitySpan.classList.add('quantity-item');
-              //containerToRemove.appendChild(quantitySpan); 
-              containerToRemove.appendChild(createItemQuantity(currentItem['quantity']));
-            }
-          } else {
-            // Remove quantity item and update container
-            if (quantity) {
-              quantity.innerText = '';
-              containerToRemove.removeChild(banner);
-            }
-          }
+    console.log('New Quantity: ', inventory[category][itemType][itemName]['quantity']);
+    let quantity = inventory[category][itemType][itemName]['quantity'];
+    updateQuantityCount(quantityElement, quantity);
+    
+    if(quantity < 2){
+      banner.classList.add('hidden');
 
-          // Remove the container if the quantity is 0
-          if (currentItem['quantity'] === 0) {
-            gridContainer.removeChild(containerToRemove);   //remove item from inventory grid
-            delete inventory[category][itemType][itemName]; //delete from inventory object 
-          } */
+      console.group('QUANTITY IS LESS THAN 2...');
+      console.log('Removing Quantity Banner...')
+      console.groupEnd();
+    }
+    if(quantity === 0){ //we have no more quantity so remove from player inventory on the grid and the object. 
+      gridContainer.removeChild(containerToRemove); //remove the grid item from our inventory grid
+      delete inventory[category][itemType][itemName]; //delete our item from inventory object
+
+      if(Object.keys(inventory[category][itemType]).length === 0){
+        categoryInvNav.removeChild(categoryToRemove);
+        delete inventory[category]; //delete the whole category from player inventory
+        const numOfNavElements = 1 + Object.keys(inventory).length;
+        console.log('num of navs...: ', numOfNavElements);
+        updateCategoryWidths(categoryInvNav, numOfNavElements);
+        updateAllCategoryElement(categoryInvNav.querySelector('.all-category'), numOfNavElements);
+      }
+      console.group('QUANTITY is 0...');
+      console.log('Removing grid item from Inventory Grid...')
+      console.log('Deleting item from player inventory object');
+      console.groupEnd();
+    }
+  }
+  console.groupEnd();
+}
+
+//search through our shop inventory object that has the image that matches the one we grabbed from an event on shop grid.
+//This allows us to grab all the data we need from the shop inventory, we grab from our object because shop grid data may not contain all the info about our item.
+function findMatchingImage(objInventory, image) { 
+  for (let category in objInventory) {
+    for (let itemType in objInventory[category]) {
+      for (let itemName in objInventory[category][itemType]) {
+        if (objInventory[category][itemType][itemName]['image'] === image) {
+           console.log('Matching Image Found w/ Data: ', { category, itemType, itemName, itemKeys: objInventory[category][itemType][itemName] });
+          return { category, itemType, itemName, itemKeys: objInventory[category][itemType][itemName] };
         }
       }
     }
   }
+}
+function initializeInvObj(category, itemType, itemName){
+  if(!inventory[category]){
+    inventory[category] = {};
+  }
+  if (!inventory[category][itemType]) {
+    inventory[category][itemType] = {};
+  }
+  
+  if (!inventory[category][itemType][itemName]) {
+    inventory[category][itemType][itemName] = {};
+  }
+}
 
-  console.log(inventory);
-} 
-
+/* ---------------------------------------------------------------------------------------------- */
+/*                                   POPULATENPC - MAKE OUR NPC                                   */
+/* ---------------------------------------------------------------------------------------------- */
 function populateNPC(name){
   const npc = document.querySelector('#npc')
   const image = document.createElement('img');
@@ -979,7 +1115,7 @@ function populateNPC(name){
   image.classList.add('flipX');
   image.id = name;
 
-  const speechBubble =  document.createElement('div');
+  const speechBubble = document.createElement('div');
   speechBubble.classList.add('textBubble');
 
   npc.appendChild(image);
@@ -990,3 +1126,26 @@ function populateNPC(name){
   document.dispatchEvent(npcPopulatedEvent);
 }
 
+/* ---------------------------------------------------------------------------------------------- */
+/*                                BUY AND SELL BUTTON CLICK EVENTS                                */
+/* ---------------------------------------------------------------------------------------------- */
+
+document.querySelector('#buy-button').addEventListener('click', () => {
+  document.querySelector('#sell-button').classList.add('gray-background')
+  document.querySelector('#buy-button').classList.remove('gray-background')
+  document.querySelector('#shop-grid').classList.remove('hidden')
+  document.querySelector('#inventory-grid').classList.add('hidden')
+
+  document.querySelector('#category-shop-navbar').classList.remove('hidden');
+  document.querySelector('#category-inv-navbar').classList.add('hidden');
+})
+
+document.querySelector('#sell-button').addEventListener('click', () =>{
+  document.querySelector('#buy-button').classList.add('gray-background')
+  document.querySelector('#sell-button').classList.remove('gray-background')
+  document.querySelector('#shop-grid').classList.add('hidden')
+  document.querySelector('#inventory-grid').classList.remove('hidden')
+
+  document.querySelector('#category-shop-navbar').classList.add('hidden');
+  document.querySelector('#category-inv-navbar').classList.remove('hidden');
+})
