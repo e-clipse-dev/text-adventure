@@ -86,7 +86,6 @@ const hideMessageArea = () => {
 }
 //clears text
 const clearText = () => {
-    console.log(messageArea.innerText)
     messageArea.innerText = "";
 }
 
